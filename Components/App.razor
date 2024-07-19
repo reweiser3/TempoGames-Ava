@@ -5,15 +5,22 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-    <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="app.css" />
-    <link rel="stylesheet" href="Ava.styles.css" />
+    <link href="css/app.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet @rendermode="RenderModeForPage" />
 </head>
 
 <body>
     <Routes @rendermode="RenderModeForPage" />
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
+
+    <!-- Note: Even though Flowbite running on server would not typically require this, since -->
+    <!--       we are running in Interactive it requires this to initialize flowbite properly -->
+    <script>
+        window.initializeFlowbite = () => {
+            initFlowbite();
+        }
+    </script>
     <script src="_framework/blazor.web.js"></script>
 </body>
 
