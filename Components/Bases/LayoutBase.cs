@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.JSInterop;
 using System.Security.Claims;
+using Ava.Services;
 
 namespace Ava.Components.Bases
 {
@@ -25,7 +26,7 @@ namespace Ava.Components.Bases
         protected ILogger<LayoutBase> Logger { get; set; } = default!;
 
         [Inject]
-        protected UserManager<ApplicationUser> UserManager { get; set; } = default!;
+        protected UserService UserService { get; set; } = default!;
 
         [Inject]
         protected SignInManager<ApplicationUser> SignInManager { get; set; } = default!;
@@ -56,7 +57,7 @@ namespace Ava.Components.Bases
                     var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                     if (userId != null)
                     {
-                        CurrentUser = await UserManager.FindByIdAsync(userId);
+                        CurrentUser = await UserService.FindUserByIdAsync(userId);
 
                         Logger.LogInformation("Current user loaded: {UserId}", userId);
                     }
@@ -94,6 +95,20 @@ namespace Ava.Components.Bases
         protected void Login()
         {
             NavigationManager.NavigateTo("Account/Login", true);
+        }
+
+        protected bool DoesAvatarExist(string userId)
+        {
+            string filePath = Path.Combine("wwwroot", "images", "avatars", $"{userId}.png");
+            return System.IO.File.Exists(filePath);
+        }
+
+        protected override async Task OnAfterRenderAsync(bool isFirstRender)
+        {
+            if (isFirstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("window.initializeFlowbite");
+            }
         }
     }
 }

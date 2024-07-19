@@ -1,4 +1,4 @@
-﻿@inject NavigationManager NavigationManager
+﻿@inherits Ava.Components.Bases.LayoutBase
 
 <nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
     <div class="flex flex-wrap justify-between items-center">
@@ -438,7 +438,7 @@
             </div>
             <AuthorizeView>
                 <Authorized>
-@*                     @if (CurrentUser != null)
+                    @if (CurrentUser != null)
                     {
                         <button type="button"
                                 class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -467,10 +467,10 @@
                              id="dropdown">
                             <div class="py-3 px-4">
                                 <span class="block text-sm font-semibold text-gray-900 dark:text-white">
-                                    @CurrentUser.Given @CurrentUser.Family
+                                    @CurrentUser.Id
                                 </span>
                                 <span class="block text-sm text-gray-900 truncate dark:text-white">
-                                    @CurrentUser.Gamertag
+                                    @CurrentUser.Email
                                 </span>
                             </div>
                             <ul class="py-1 text-gray-700 dark:text-gray-300"
@@ -558,7 +558,7 @@
                             </ul>
                         </div>
 
-                    } *@
+                    }
                 </Authorized>
                 <NotAuthorized>
                     <button @onclick="Login" type="button" class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
