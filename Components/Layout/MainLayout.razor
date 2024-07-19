@@ -1,7 +1,6 @@
-﻿@inherits LayoutComponentBase
-@inject IJSRuntime Js
+﻿@inherits Ava.Components.Bases.LayoutBase
 
-<div class="page">
+@* <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -15,7 +14,19 @@
             @Body
         </article>
     </main>
+</div> *@
+
+<div class="antialiased bg-gray-50 dark:bg-gray-900">
+    <Header />
+    
+    <!-- Sidebar -->
+    <LeftNavigation />
+    <!-- Main content -->
+    <main class="p-4 md:ml-64 h-auto pt-20">
+        @Body
+    </main>
 </div>
+
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -28,7 +39,7 @@
     {
         if (isFirstRender)
         {
-            await Js.InvokeVoidAsync("window.initializeFlowbite");
+            await JSRuntime.InvokeVoidAsync("window.initializeFlowbite");
         }
     }
 }
