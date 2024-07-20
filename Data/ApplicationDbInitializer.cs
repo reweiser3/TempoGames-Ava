@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Ava.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ava.Data
@@ -13,6 +15,7 @@ namespace Ava.Data
             using var scope = serviceProvider.CreateScope();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var friendsService = scope.ServiceProvider.GetRequiredService<FriendsService>();
 
             // Ensure database is created
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -28,9 +31,10 @@ namespace Ava.Data
             // Create default user
             string defaultUserName = "demo@tempogames.com";
             string defaultUserPassword = "yourStrong@Password1";
+            ApplicationUser defaultUser = null;
             if (await userManager.FindByNameAsync(defaultUserName) == null)
             {
-                var defaultUser = new ApplicationUser
+                defaultUser = new ApplicationUser
                 {
                     UserName = defaultUserName,
                     Email = defaultUserName,
@@ -53,6 +57,10 @@ namespace Ava.Data
                     await userManager.AddToRoleAsync(defaultUser, roleName);
                 }
             }
+            else
+            {
+                defaultUser = await userManager.FindByNameAsync(defaultUserName);
+            }
 
             // Create 10 fictional users
             var users = new[]
@@ -69,6 +77,7 @@ namespace Ava.Data
                 new { UserName = "henry.anderson@example.com", Password = "Password123!", Given = "Henry", Middle = "J", Family = "Anderson", Birthdate = new DateTime(1983, 10, 10), Gamertag = "HenryA", Gender = "Male", City = "San Jose", State = "California", Country = "United States" },
             };
 
+            var userIds = new List<string>();
             foreach (var u in users)
             {
                 if (await userManager.FindByNameAsync(u.UserName) == null)
@@ -93,8 +102,22 @@ namespace Ava.Data
                     if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, roleName);
+                        userIds.Add(user.Id);
                     }
                 }
+                else
+                {
+                    var existingUser = await userManager.FindByNameAsync(u.UserName);
+                    userIds.Add(existingUser.Id);
+                }
+            }
+
+            // Randomly select 5 users to add as friends to the default user
+            var random = new Random();
+            var selectedFriends = userIds.OrderBy(x => random.Next()).Take(5).ToList();
+            foreach (var friendId in selectedFriends)
+            {
+                await friendsService.AddFriendAsync(defaultUser.Id, friendId);
             }
         }
     }

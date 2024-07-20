@@ -38,6 +38,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<FriendsService>();
 
 var app = builder.Build();
 
