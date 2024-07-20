@@ -1,5 +1,5 @@
 ﻿@page "/Account/Register"
-
+@layout AuthenticationLayout
 @using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
@@ -7,6 +7,7 @@
 @using Microsoft.AspNetCore.WebUtilities
 @using Ava.Data
 @using Ava.Components.Account
+@using Ava.Components.Layout
 @using Ava.Services
 
 @inject UserManager<ApplicationUser> UserManager

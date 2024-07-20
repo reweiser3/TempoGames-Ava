@@ -1,6 +1,7 @@
 ﻿@page "/Account/Login"
-
+@layout AuthenticationLayout
 @using System.ComponentModel.DataAnnotations
+@using Ava.Components.Layout
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using Ava.Data
@@ -12,57 +13,46 @@
 
 <PageTitle>Log in</PageTitle>
 
-<h1>Log in</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <StatusMessage Message="@errorMessage" />
-            <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
-                <DataAnnotationsValidator />
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <ValidationSummary class="text-danger" role="alert" />
-                <div class="form-floating mb-3">
-                    <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label for="email" class="form-label">Email</label>
-                    <ValidationMessage For="() => Input.Email" class="text-danger" />
-                </div>
-                <div class="form-floating mb-3">
-                    <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label for="password" class="form-label">Password</label>
-                    <ValidationMessage For="() => Input.Password" class="text-danger" />
-                </div>
-                <div class="checkbox mb-3">
-                    <label class="form-label">
-                        <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input" />
-                        Remember me
-                    </label>
-                </div>
-                <div>
-                    <button type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a href="Account/ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a href="Account/ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
-            </EditForm>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-    </div>
-</div>
+<h1 class="text-2xl font-bold mb-4">Log in</h1>
+<section>
+    <StatusMessage Message="@errorMessage" />
+    <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login" class="space-y-4">
+        <DataAnnotationsValidator />
+        <h2 class="text-xl font-semibold mb-2">Use a local account to log in.</h2>
+        <hr class="border-gray-300" />
+        <ValidationSummary class="text-red-500" role="alert" />
+        <div class="relative mb-4">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <InputText id="email" @bind-Value="Input.Email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="name@example.com" aria-required="true" />
+            <ValidationMessage For="() => Input.Email" class="text-red-500" />
+        </div>
+        <div class="relative mb-4">
+            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+            <InputText id="password" type="password" @bind-Value="Input.Password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="password" aria-required="true" />
+            <ValidationMessage For="() => Input.Password" class="text-red-500" />
+        </div>
+        <div class="flex items-center mb-4">
+            <label class="inline-flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                <InputCheckbox @bind-Value="Input.RememberMe" class="form-checkbox text-primary-500 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-500 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" />
+                <span class="ml-2">Remember me</span>
+            </label>
+        </div>
+        <div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Log in</button>
+        </div>
+        <div class="mt-4">
+            <p>
+                <a href="Account/ForgotPassword" class="text-blue-500 hover:underline">Forgot your password?</a>
+            </p>
+            <p>
+                <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))" class="text-blue-500 hover:underline">Register as a new user</a>
+            </p>
+            <p>
+                <a href="Account/ResendEmailConfirmation" class="text-blue-500 hover:underline">Resend email confirmation</a>
+            </p>
+        </div>
+    </EditForm>
+</section>
 
 @code {
     private string? errorMessage;
