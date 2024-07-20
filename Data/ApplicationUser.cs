@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using Ava.Data.Friendship;
 
 namespace Ava.Data
 {
@@ -66,6 +67,9 @@ namespace Ava.Data
         /// </summary>
         [Required]
         public string Country { get; set; }
+
+        public virtual ICollection<Friend> Friendships { get; set; }
+        public virtual ICollection<Friend> FriendsOf { get; set; }
     }
 
 }

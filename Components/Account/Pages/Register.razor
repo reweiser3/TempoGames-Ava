@@ -26,19 +26,19 @@
     <StatusMessage Message="@Message" />
     <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
     <DataAnnotationsValidator />
-    <ValidationSummary class="text-danger" role="alert" />
+    <ValidationSummary class="text-red-500" role="alert" />
     <div class="mb-3">
-        <label for="email">Email</label>
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
         <InputText @bind-Value="Input.Email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-        <ValidationMessage For="() => Input.Email" class="text-danger" />
+        <ValidationMessage For="() => Input.Email" class="text-red-500" />
     </div>
     <div class="mb-3">
-        <label for="password">Password</label>
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
         <InputText type="password" @bind-Value="Input.Password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" autocomplete="new-password" aria-required="true" placeholder="password" />
-        <ValidationMessage For="() => Input.Password" class="text-danger" />
+            <ValidationMessage For="() => Input.Password" class="text-red-500" />
     </div>
     <div class="mb-3">
-        <label for="confirm-password">Confirm Password</label>
+        <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
             <InputText type="password" @bind-Value="Input.ConfirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" autocomplete="new-password" aria-required="true" placeholder="password" />
             <ValidationMessage For="() => Input.ConfirmPassword" class="text-red-500" />
     </div>
@@ -71,9 +71,9 @@
     
     <!-- Telephone -->
     <div class="mb-3">
-        <label for="phone">Phone</label>
+        <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
         <InputText @bind-Value="Input.PhoneNumber" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
-        <ValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
+        <ValidationMessage For="() => Input.PhoneNumber" class="text-red-500" />
     </div>
 
     <!-- Gamertag -->
