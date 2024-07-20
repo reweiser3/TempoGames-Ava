@@ -38,17 +38,17 @@
             </label>
         </div>
         <div>
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">Log in</button>
+            <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary-500">Log in</button>
         </div>
         <div class="mt-4">
             <p>
-                <a href="Account/ForgotPassword" class="text-blue-500 hover:underline">Forgot your password?</a>
+                <a href="Account/ForgotPassword" class="text-primary-500 hover:underline">Forgot your password?</a>
             </p>
             <p>
-                <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))" class="text-blue-500 hover:underline">Register as a new user</a>
+                <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))" class="text-primary-500 hover:underline">Register as a new user</a>
             </p>
             <p>
-                <a href="Account/ResendEmailConfirmation" class="text-blue-500 hover:underline">Resend email confirmation</a>
+                <a href="Account/ResendEmailConfirmation" class="text-primary-500 hover:underline">Resend email confirmation</a>
             </p>
         </div>
     </EditForm>
