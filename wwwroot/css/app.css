@@ -1829,10 +1829,6 @@ input:checked + .toggle-bg {
   padding-bottom: 1.25rem;
 }
 
-.pb-0 {
-  padding-bottom: 0px;
-}
-
 .pl-10 {
   padding-left: 3rem;
 }
@@ -1855,10 +1851,6 @@ input:checked + .toggle-bg {
 
 .pt-20 {
   padding-top: 5rem;
-}
-
-.pt-3 {
-  padding-top: 0.75rem;
 }
 
 .pt-48 {
@@ -2438,10 +2430,6 @@ h1:focus {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
-
-  .sm\:pt-4 {
-    padding-top: 1rem;
-  }
 }
 
 @media (min-width: 768px) {
@@ -2488,6 +2476,10 @@ h1:focus {
 @media (min-width: 1024px) {
   .lg\:order-2 {
     order: 2;
+  }
+
+  .lg\:col-span-3 {
+    grid-column: span 3 / span 3;
   }
 
   .lg\:flex {
