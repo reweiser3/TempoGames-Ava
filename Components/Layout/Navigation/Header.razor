@@ -447,8 +447,8 @@
                                 data-dropdown-toggle="dropdown">
                             <span class="sr-only">Open user menu</span>
                             @{
-                                var avatarUrl = $"images/avatars/{CurrentUser.Id}.png";
-                                if (DoesAvatarExist(CurrentUser.Id))
+                                var avatarUrl = $"images/avatars/{CurrentUser.ProfilePictureUrl}";
+                                if (DoesAvatarExist(CurrentUser.ProfilePictureUrl))
                                 {
                                     <img class="w-8 h-8 rounded-full"
                                          src="@avatarUrl"
@@ -456,9 +456,9 @@
                                 }
                                 else
                                 {
-                                    <img class="w-8 h-8 rounded-full"
-                                         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
-                                         alt="user photo" />
+                                    <div class="relative w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                                        <svg class="absolute w-8 h-8 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                    </div>
                                 }
                             }
                         </button>
@@ -467,7 +467,7 @@
                              id="dropdown">
                             <div class="py-3 px-4">
                                 <span class="block text-sm font-semibold text-gray-900 dark:text-white">
-                                    @CurrentUser.Id
+                                    @CurrentUser.DisplayName
                                 </span>
                                 <span class="block text-sm text-gray-900 truncate dark:text-white">
                                     @CurrentUser.Email
