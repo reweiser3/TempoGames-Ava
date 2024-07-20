@@ -79,6 +79,19 @@ namespace Ava.Services
                 throw new Exception("Friendship not found.");
             }
         }
+
+        /// <summary>
+        /// Gets the list of friends for a given user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A task representing the asynchronous operation returning a list of friends.</returns>
+        public async Task<List<Friend>> GetFriendsByUserIdAsync(string userId)
+        {
+            return await _context.Friends
+                .Where(f => f.PrimaryUserId == userId)
+                .Include(f => f.FriendUser)
+                .ToListAsync();
+        }
     }
 
 }
