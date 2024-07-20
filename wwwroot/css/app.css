@@ -1283,16 +1283,8 @@ input:checked + .toggle-bg {
   height: 0.875rem;
 }
 
-.h-32 {
-  height: 8rem;
-}
-
 .h-4 {
   height: 1rem;
-}
-
-.h-48 {
-  height: 12rem;
 }
 
 .h-5 {
@@ -1313,10 +1305,6 @@ input:checked + .toggle-bg {
 
 .h-9 {
   height: 2.5rem;
-}
-
-.h-96 {
-  height: 24rem;
 }
 
 .h-auto {
@@ -2471,14 +2459,6 @@ h1:focus {
 
   .md\:hidden {
     display: none;
-  }
-
-  .md\:h-64 {
-    height: 16rem;
-  }
-
-  .md\:h-72 {
-    height: 18rem;
   }
 
   .md\:w-64 {

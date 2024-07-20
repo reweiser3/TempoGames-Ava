@@ -30,7 +30,23 @@ namespace Ava.Data
             string userPassword = "yourStrong@Password1";
             if (await userManager.FindByNameAsync(userName) == null)
             {
-                var user = new ApplicationUser { UserName = userName, Email = userName, EmailConfirmed = true };
+                var user = new ApplicationUser
+                {
+                    UserName = userName,
+                    Email = userName,
+                    EmailConfirmed = true,
+                    PhoneNumber = "+1 (336) 995-8440",
+                    PhoneNumberConfirmed = true,
+                    Given = "Richard",
+                    Middle = "E",
+                    Family = "Weiser",
+                    Birthdate = new DateTime(1975, 11, 16),
+                    Gamertag = "LocutusOfBorg",
+                    Gender = "Male",
+                    City = "Greensboro",
+                    State = "North Carolina",
+                    Country = "United States"
+                };
                 var result = await userManager.CreateAsync(user, userPassword);
                 if (result.Succeeded)
                 {
