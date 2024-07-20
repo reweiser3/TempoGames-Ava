@@ -20,42 +20,115 @@
 
 <PageTitle>Register</PageTitle>
 
-<h1>Register</h1>
+<h1 class="text-2xl font-bold mb-4 text-primary dark:text-white">Create a new account</h1>
 
-<div class="row">
-    <div class="col-md-4">
-        <StatusMessage Message="@Message" />
-        <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-            <DataAnnotationsValidator />
-            <h2>Create a new account.</h2>
-            <hr />
-            <ValidationSummary class="text-danger" role="alert" />
-            <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label for="email">Email</label>
-                <ValidationMessage For="() => Input.Email" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="password">Password</label>
-                <ValidationMessage For="() => Input.Password" class="text-danger" />
-            </div>
-            <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="confirm-password">Confirm Password</label>
-                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </EditForm>
+<section>
+    <StatusMessage Message="@Message" />
+    <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-red-500" role="alert" />
+    <div class="mb-3">
+        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+        <InputText @bind-Value="Input.Email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+        <ValidationMessage For="() => Input.Email" class="text-red-500" />
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
+    <div class="mb-3">
+        <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+        <InputText type="password" @bind-Value="Input.Password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" autocomplete="new-password" aria-required="true" placeholder="password" />
+            <ValidationMessage For="() => Input.Password" class="text-red-500" />
     </div>
-</div>
+    <div class="mb-3">
+        <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+            <InputText type="password" @bind-Value="Input.ConfirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" autocomplete="new-password" aria-required="true" placeholder="password" />
+            <ValidationMessage For="() => Input.ConfirmPassword" class="text-red-500" />
+    </div>
+    <!-- First Name -->
+    <div class="mb-3">
+        <label for="given" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+        <InputText id="given" @bind-Value="Input.Given" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="First Name" aria-required="true" />
+        <ValidationMessage For="() => Input.Given" class="text-red-500" />
+    </div>
+
+    <!-- Middle Name -->
+    <div class="mb-3">
+        <label for="middle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
+        <InputText id="middle" @bind-Value="Input.Middle" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Middle Name" />
+    </div>
+
+    <!-- Last Name -->
+    <div class="mb-3">
+        <label for="family" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+        <InputText id="family" @bind-Value="Input.Family" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Last Name" aria-required="true" />
+        <ValidationMessage For="() => Input.Family" class="text-red-500" />
+    </div>
+
+    <!-- Birthdate -->
+    <div class="mb-3">
+        <label for="birthdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthdate</label>
+        <InputDate id="birthdate" @bind-Value="Input.Birthdate" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Birthdate" aria-required="true" />
+        <ValidationMessage For="() => Input.Birthdate" class="text-red-500" />
+    </div>
+    
+    <!-- Telephone -->
+    <div class="mb-3">
+        <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
+        <InputText @bind-Value="Input.PhoneNumber" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+        <ValidationMessage For="() => Input.PhoneNumber" class="text-red-500" />
+    </div>
+
+    <!-- Gamertag -->
+        <div class="mb-3">
+            <label for="gamertag" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gamertag</label>
+            <InputText id="gamertag" @bind-Value="Input.Gamertag" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Gamertag" aria-required="true" />
+            <ValidationMessage For="() => Input.Gamertag" class="text-red-500" />
+        </div>
+
+        <!-- Gender -->
+        <div class="mb-3">
+            <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+            <select id="gender" @bind="Input.Gender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <ValidationMessage For="() => Input.Gender" class="text-red-500" />
+        </div>
+
+        <!-- City -->
+        <div class="mb-3">
+            <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+            <InputText id="city" @bind-Value="Input.City" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="City" />
+        </div>
+
+        <!-- State -->
+        <div class="mb-3">
+            <label for="state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State</label>
+            <InputText id="state" @bind-Value="Input.State" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="State" />
+        </div>
+
+        <!-- Country -->
+        <div class="mb-3">
+            <label for="countrySelect" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+            <select id="countrySelect" @bind="Input.Country" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                <option value="UnitedStates">United States</option>
+                <option value="China">China</option>
+                <option value="Japan">Japan</option>
+                <option value="SouthKorea">South Korea</option>
+                <option value="Germany">Germany</option>
+                <option value="UnitedKingdom">United Kingdom</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Canada">Canada</option>
+                <option value="France">France</option>
+                <option value="Other">Other</option>
+            </select>
+            <ValidationMessage For="() => Input.Country" class="text-red-500" />
+        </div>
+    <button type="submit" class="w-full bg-primary text-white py-2 px-4 rounded hover:bg-primary-500">Register</button>
+</EditForm>
+    <hr />
+    <ExternalLoginPicker />
+</section>
+
 
 @code {
     private IEnumerable<IdentityError>? identityErrors;
@@ -75,6 +148,18 @@
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+        user.Given = Input.Given;
+        user.Middle = Input.Middle;
+        user.Family = Input.Family;
+        user.Birthdate = Input.Birthdate;
+        user.Gamertag = Input.Gamertag;
+        user.Gender = Input.Gender.ToString();
+        user.City = Input.City;
+        user.State = Input.State;
+        user.Country = Input.Country.ToString();
+        user.PhoneNumber = Input.PhoneNumber;
+
         var result = await UserManager.CreateAsync(user, Input.Password);
 
         if (!result.Succeeded)
@@ -126,9 +211,48 @@
         }
         return (IUserEmailStore<ApplicationUser>)UserStore;
     }
-
+    
     private sealed class InputModel
     {
+        [Required]
+        [Display(Name = "First Name")]
+        public string Given { get; set; } = "";
+
+        [Display(Name = "Middle Name")]
+        public string Middle { get; set; } = "";
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string Family { get; set; } = "";
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime Birthdate { get; set; } = DateTime.UtcNow.AddYears(-13);
+
+        [Required]
+        [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Gamertag must consist of letters, numbers, _, or - only.")]
+        [Display(Name = "Gamertag")]
+        public string Gamertag { get; set; } = "";
+
+        [Required]
+        [Display(Name="Phone")]
+        public string PhoneNumber { get; set; } = "+1"
+;
+        [Display(Name = "Gender")]
+        [EnumDataType(typeof(Gender))]
+        public Gender Gender { get; set; } = Gender.Other;
+
+        [Display(Name = "City")]
+        public string City { get; set; } = "";
+
+        [Display(Name = "State")]
+        public string State { get; set; } = "";
+
+        [Required]
+        [Display(Name = "Country")]
+        [EnumDataType(typeof(Country))]
+        public Country Country { get; set; } = Country.UnitedStates;
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -144,5 +268,26 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
+    }
+
+    public enum Gender
+    {
+        Male,
+        Female,
+        Other
+    }
+
+    public enum Country
+    {
+        UnitedStates,
+        China,
+        Japan,
+        SouthKorea,
+        Germany,
+        UnitedKingdom,
+        Brazil,
+        Canada,
+        France,
+        Other
     }
 }

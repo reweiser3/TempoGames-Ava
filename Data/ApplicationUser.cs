@@ -1,10 +1,75 @@
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using Ava.Data.Friendship;
 
 namespace Ava.Data
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        /// <summary>
+        /// The given (first) name of the user.
+        /// This field is required.
+        /// </summary>
+        [Required]
+        public string Given { get; set; }
+
+        /// <summary>
+        /// The middle name of the user.
+        /// This field is optional.
+        /// </summary>
+        public string Middle { get; set; }
+
+        /// <summary>
+        /// The family (last) name of the user.
+        /// This field is required.
+        /// </summary>
+        [Required]
+        public string Family { get; set; }
+
+        /// <summary>
+        /// The birthdate of the user.
+        /// This field is required.
+        /// </summary>
+        [Required]
+        public DateTime Birthdate { get; set; }
+
+        /// <summary>
+        /// The unique gamertag of the user.
+        /// Must consist of letters, numbers, underscores (_), or hyphens (-) only.
+        /// This field is required and must be unique.
+        /// </summary>
+        [Required]
+        [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Gamertag must consist of letters, numbers, _, or - only.")]
+        public string Gamertag { get; set; }
+
+        /// <summary>
+        /// The gender of the user.
+        /// This field is optional.
+        /// </summary>
+        public string Gender { get; set; }
+
+        /// <summary>
+        /// The city of residence of the user.
+        /// This field is optional.
+        /// </summary>
+        public string City { get; set; }
+
+        /// <summary>
+        /// The state of residence of the user.
+        /// This field is optional.
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
+        /// The country of residence of the user.
+        /// This field is required.
+        /// </summary>
+        [Required]
+        public string Country { get; set; }
+
+        public virtual ICollection<Friend> Friendships { get; set; }
+        public virtual ICollection<Friend> FriendsOf { get; set; }
     }
 
 }
