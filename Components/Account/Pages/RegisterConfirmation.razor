@@ -1,12 +1,14 @@
 ﻿@page "/Account/RegisterConfirmation"
 
 @using System.Text
+@using System.Text.Encodings.Web
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using Ava.Data
+@using Ava.Services
 
 @inject UserManager<ApplicationUser> UserManager
-@inject IEmailSender<ApplicationUser> EmailSender
+@inject IEmailSender EmailSender
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
@@ -19,8 +21,7 @@
 @if (emailConfirmationLink is not null)
 {
     <p>
-        This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
-        Normally this would be emailed: <a href="@emailConfirmationLink">Click here to confirm your account</a>
+        Please check your email to confirm your account: <a href="@emailConfirmationLink">Click here to confirm your account</a>
     </p>
 }
 else
@@ -46,23 +47,26 @@ else
         if (Email is null)
         {
             RedirectManager.RedirectTo("");
+            return;
         }
 
         var user = await UserManager.FindByEmailAsync(Email);
         if (user is null)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-            statusMessage = "Error finding user for unspecified email";
+            statusMessage = "Error finding user for the provided email";
         }
-        else if (EmailSender is IdentityNoOpEmailSender)
+        else
         {
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
             var userId = await UserManager.GetUserIdAsync(user);
             var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             emailConfirmationLink = NavigationManager.GetUriWithQueryParameters(
                 NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
                 new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+
+            // Send confirmation email using the default IEmailSender
+            await EmailSender.SendEmailAsync(Email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(emailConfirmationLink)}'>clicking here</a>.");
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime Js
+
+<div class="bg-gray-50 dark:bg-gray-900">
+    <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div class="bg-white shadow-lg rounded-lg flex overflow-hidden max-w-6xl">
+            <!-- Left side content -->
+            <div class="w-full lg:w-1/2 pt-48 p-8 lg:p-16 flex flex-col justify-start bg-gray-50 dark:bg-gray-800">
+                <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-primary dark:text-white">
+                    <img class="h-8 mr-2" src="images/logos/ava.png" alt="Ava">
+                    Ava
+                </a>
+                <h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Get started quickly</h1>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Integrate with developer-friendly APIs or choose low-code.</p>
+                <h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Support any business model</h1>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">Host code that you don't want to share with the world in private.</p>
+                <h1 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Join millions of businesses</h1>
+                <p class="text-gray-600 dark:text-gray-400">CHAPPiE is trusted by ambitious startups and enterprises of every size.</p>
+            </div>
+
+            <!-- Right side form -->
+            <div class="w-full lg:w-1/2 p-8 lg:p-16 bg-white dark:bg-gray-800">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    @Body
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        if (isFirstRender)
+        {
+            await Js.InvokeVoidAsync("window.initializeFlowbite");
+        }
+    }
+}

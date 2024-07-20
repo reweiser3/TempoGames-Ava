@@ -1,0 +1,15 @@
+﻿@page "/Account/Logout"
+@using Ava.Data
+@using Microsoft.AspNetCore.Identity
+@inject NavigationManager NavigationManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ILogger<Logout> Logger
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await SignInManager.SignOutAsync();
+        Logger.LogInformation("User logged out.");
+        NavigationManager.NavigateTo("/");
+    }
+}

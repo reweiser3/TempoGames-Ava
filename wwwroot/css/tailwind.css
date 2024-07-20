@@ -1,3 +1,27 @@
 ﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1:focus {
+    outline: none !important;
+}
+
+#blazor-error-ui {
+    display: none
+}
+
+.text-primary {
+    color: #0f7278;
+}
+
+.bg-primary {
+    background-color: #0f7278;
+}
+
+.border-primary {
+    border-color: #a1a8ad;
+}
+
+.border-primary:hover {
+    border-color: #0f7278;
+}
