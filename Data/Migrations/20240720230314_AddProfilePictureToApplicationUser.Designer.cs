@@ -4,6 +4,7 @@ using Ava.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ava.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240720230314_AddProfilePictureToApplicationUser")]
+    partial class AddProfilePictureToApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,31 +154,6 @@ namespace Ava.Migrations
                     b.HasIndex("PrimaryUserId");
 
                     b.ToTable("Friends");
-                });
-
-            modelBuilder.Entity("Ava.Data.Games.Game", b =>
-                {
-                    b.Property<int>("GameId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GameId"));
-
-                    b.Property<DateTime>("DatePlayed")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsWin")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("GameId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Games");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -328,17 +306,6 @@ namespace Ava.Migrations
                     b.Navigation("FriendUser");
 
                     b.Navigation("PrimaryUser");
-                });
-
-            modelBuilder.Entity("Ava.Data.Games.Game", b =>
-                {
-                    b.HasOne("Ava.Data.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

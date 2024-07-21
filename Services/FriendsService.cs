@@ -57,21 +57,20 @@ namespace Ava.Services
         }
 
         /// <summary>
-        /// Sets the favorite status for a friendship.
+        /// Toggles the favorite status for a friendship.
         /// </summary>
         /// <param name="primaryUserId">The ID of the primary user.</param>
         /// <param name="friendUserId">The ID of the friend.</param>
-        /// <param name="isFavorite">The favorite status to set.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
         /// <exception cref="Exception">Thrown if the friendship is not found.</exception>
-        public async Task SetFavoriteAsync(string primaryUserId, string friendUserId, bool isFavorite)
+        public async Task ToggleFavoriteAsync(string primaryUserId, string friendUserId)
         {
             var friendship = await _context.Friends
                 .FirstOrDefaultAsync(f => f.PrimaryUserId == primaryUserId && f.FriendUserId == friendUserId);
 
             if (friendship != null)
             {
-                friendship.IsFavorite = isFavorite;
+                friendship.IsFavorite = !friendship.IsFavorite;
                 await _context.SaveChangesAsync();
             }
             else
@@ -93,5 +92,4 @@ namespace Ava.Services
                 .ToListAsync();
         }
     }
-
 }

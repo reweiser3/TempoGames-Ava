@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Ava.Data.Games;
 
 namespace Ava.Data
 {
@@ -17,16 +18,23 @@ namespace Ava.Data
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var friendsService = scope.ServiceProvider.GetRequiredService<FriendsService>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Ensure database is created
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await context.Database.MigrateAsync();
 
-            // Create default role
-            string roleName = "Player";
-            if (!await roleManager.RoleExistsAsync(roleName))
+            // Create default roles
+            string playerRoleName = "Player";
+            string adminRoleName = "Admin";
+
+            if (!await roleManager.RoleExistsAsync(playerRoleName))
             {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
+                await roleManager.CreateAsync(new IdentityRole(playerRoleName));
+            }
+
+            if (!await roleManager.RoleExistsAsync(adminRoleName))
+            {
+                await roleManager.CreateAsync(new IdentityRole(adminRoleName));
             }
 
             // Create default user
@@ -50,12 +58,14 @@ namespace Ava.Data
                     Gender = "Male",
                     City = "Greensboro",
                     State = "North Carolina",
-                    Country = "United States"
+                    Country = "United States",
+                    ProfilePictureUrl = "default.png"
                 };
                 var result = await userManager.CreateAsync(defaultUser, defaultUserPassword);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(defaultUser, roleName);
+                    await userManager.AddToRoleAsync(defaultUser, playerRoleName);
+                    await userManager.AddToRoleAsync(defaultUser, adminRoleName);
                 }
             }
             else
@@ -82,6 +92,8 @@ namespace Ava.Data
                 };
 
                 var userIds = new List<string>();
+                var random = new Random();
+                var x = 1;
                 foreach (var u in users)
                 {
                     if (await userManager.FindByNameAsync(u.UserName) == null)
@@ -99,13 +111,14 @@ namespace Ava.Data
                             Gender = u.Gender,
                             City = u.City,
                             State = u.State,
-                            Country = u.Country
+                            Country = u.Country,
+                            ProfilePictureUrl = $"profile-picture-{x}.jpg"
                         };
 
                         var result = await userManager.CreateAsync(user, u.Password);
                         if (result.Succeeded)
                         {
-                            await userManager.AddToRoleAsync(user, roleName);
+                            await userManager.AddToRoleAsync(user, playerRoleName);
                             userIds.Add(user.Id);
                         }
                     }
@@ -114,15 +127,34 @@ namespace Ava.Data
                         var existingUser = await userManager.FindByNameAsync(u.UserName);
                         userIds.Add(existingUser.Id);
                     }
+
+                    x++;
                 }
 
                 // Randomly select 5 users to add as friends to the default user
-                var random = new Random();
                 var selectedFriends = userIds.OrderBy(x => random.Next()).Take(5).ToList();
                 foreach (var friendId in selectedFriends)
                 {
                     await friendsService.AddFriendAsync(defaultUser.Id, friendId);
                 }
+
+                // Insert random number of games for each user, including the default user
+                var allUsers = new List<string>(userIds) { defaultUser.Id };
+                foreach (var userId in allUsers)
+                {
+                    var numberOfGames = random.Next(5, 21); // Random number of games between 5 and 20
+                    for (int i = 0; i < numberOfGames; i++)
+                    {
+                        var game = new Game
+                        {
+                            UserId = userId,
+                            IsWin = random.Next(0, 2) == 1, // Randomly true or false
+                            DatePlayed = DateTime.Now.AddDays(-random.Next(1, 365)) // Random date within the last year
+                        };
+                        await context.Games.AddAsync(game);
+                    }
+                }
+                await context.SaveChangesAsync();
             }
         }
     }

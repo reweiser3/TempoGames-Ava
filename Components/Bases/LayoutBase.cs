@@ -97,9 +97,9 @@ namespace Ava.Components.Bases
             NavigationManager.NavigateTo("Account/Login", true);
         }
 
-        protected bool DoesAvatarExist(string userId)
+        protected bool DoesAvatarExist(string userProfilePicture)
         {
-            string filePath = Path.Combine("wwwroot", "images", "avatars", $"{userId}.png");
+            string filePath = Path.Combine("wwwroot", "images", "avatars", $"{userProfilePicture}");
             return System.IO.File.Exists(filePath);
         }
 
