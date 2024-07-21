@@ -12,7 +12,7 @@
 <div class="w-4/5 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
     <div class="lg:col-span-3">
         @* <img src="images/hero/heroes-home.png" class="rounded mb-4" /> *@
-        @if (CurrentUser != null)
+        @if (CurrentUser != null && (mostEasiestOpponent != default || mostFrequentOpponent != default || mostDifficultOpponent != default))
         {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div class="flex justify-center items-center w-full">
@@ -132,9 +132,9 @@
     private int totalWins = 0;
     private int totalLosses = 0;
     private double winPercentage = 0.0;
-    private OpponentStats mostFrequentOpponent;
-    private OpponentStats mostEasiestOpponent;
-    private OpponentStats mostDifficultOpponent;
+    private OpponentStats mostFrequentOpponent = default;
+    private OpponentStats mostEasiestOpponent = default;
+    private OpponentStats mostDifficultOpponent = default;
 
     protected override async Task OnInitializedAsync()
     {
