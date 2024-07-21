@@ -25,3 +25,12 @@ h1:focus {
 .border-primary:hover {
     border-color: #0f7278;
 }
+
+.card-hover:hover {
+    background-color: #1f2125 !important;
+    color: white;
+}
+
+.card-hover:hover img {
+    filter: brightness(0.8);
+}

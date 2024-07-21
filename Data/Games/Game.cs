@@ -29,6 +29,18 @@ namespace Ava.Data.Games
         public virtual ApplicationUser User { get; set; }
 
         /// <summary>
+        /// Gets or sets the user ID of the opponent.
+        /// </summary>
+        [Required]
+        public string OpponentId { get; set; }
+
+        /// <summary>
+        /// Navigation property for the opponent who played the game.
+        /// </summary>
+        [ForeignKey("OpponentId")]
+        public virtual ApplicationUser Opponent { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the game was won by the user.
         /// </summary>
         public bool IsWin { get; set; }
