@@ -1,22 +1,35 @@
 ﻿@inherits Ava.Components.Bases.LayoutBase
 
 @layout AccountLayout
-
-<div class="flex justify-center">
-    <div class="w-4/5">
-        <h1 class="text-2xl font-bold">Manage your account</h1>
-
-        <div>
-            <h2 class="text-xl font-semibold mt-4">Change your account settings</h2>
-            <hr class="my-4 border-gray-300" />
-            <div class="flex">
-                <div class="w-1/4">
-                    <ManageNavMenu />
-                </div>
-                <div class="w-3/4 ml-2">
-                    @Body
+<AuthorizeView>
+    <Authorized>
+        @if (CurrentUser != default)
+        {
+            <div class="flex justify-center">
+                <div class="w-4/5">
+                    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+                        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                            <a href="Account/Manage" class="flex items-center">
+                                <img src="images/avatars/@CurrentUser.ProfilePictureUrl" class="mr-3 h-10" alt="@CurrentUser.DisplayName" title="@CurrentUser.DisplayName" />
+                                <span class="self-center text-xl text-primary font-semibold whitespace-nowrap dark:text-white">@CurrentUser.DisplayName</span>
+                            </a>
+                            <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                                <ManageNavMenu />
+                            </div>
+                        </div>
+                    </nav>
+                    <div>
+                        <h2 class="text-xl font-semibold mt-4">Change your account settings</h2>
+                        <hr class="my-4 border-gray-300" />
+                        <div class="flex">
+                            @Body
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
