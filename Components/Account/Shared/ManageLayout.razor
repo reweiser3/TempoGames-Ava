@@ -13,14 +13,10 @@
                                 <img src="images/avatars/@CurrentUser.ProfilePictureUrl" class="mr-3 h-10" alt="@CurrentUser.DisplayName" title="@CurrentUser.DisplayName" />
                                 <span class="self-center text-xl text-primary font-semibold whitespace-nowrap dark:text-white">@CurrentUser.DisplayName</span>
                             </a>
-                            <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
-                                <ManageNavMenu />
-                            </div>
+                            <ManageNavMenu />
                         </div>
                     </nav>
                     <div>
-                        <h2 class="text-xl font-semibold mt-4">Change your account settings</h2>
-                        <hr class="my-4 border-gray-300" />
                         <div class="flex">
                             @Body
                         </div>
