@@ -1,8 +1,16 @@
 ﻿@if (!string.IsNullOrEmpty(DisplayMessage))
 {
-    var statusMessageClass = DisplayMessage.StartsWith("Error") ? "danger" : "success";
-    <div class="alert alert-@statusMessageClass" role="alert">
-        @DisplayMessage
+    var statusMessageClass = DisplayMessage.StartsWith("Error") ? "bg-red-700 text-white" : "bg-green-700 text-white";
+    <div id="toast" class="fixed top-12 right-4 w-full max-w-sm p-4 rounded-lg shadow-lg @statusMessageClass" role="alert">
+        <div class="flex items-center">
+            <div class="ml-3">
+                <p class="text-sm font-medium">@DisplayMessage</p>
+            </div>
+            <button type="button" class="ml-auto -mx-1.5 -my-1.5 bg-transparent text-white rounded-lg focus:ring-2 focus:ring-white p-1.5 hover:bg-primary-200 inline-flex h-8 w-8" aria-label="Close" data-dismiss-target="#toast">
+                <span class="sr-only">Close</span>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
     </div>
 }
 
@@ -17,6 +25,8 @@
 
     private string? DisplayMessage => Message ?? messageFromCookie;
 
+    private bool _disposed;
+
     protected override void OnInitialized()
     {
         messageFromCookie = HttpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
@@ -25,5 +35,7 @@
         {
             HttpContext.Response.Cookies.Delete(IdentityRedirectManager.StatusCookieName);
         }
+
     }
 }
+
