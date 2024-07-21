@@ -138,17 +138,67 @@ namespace Ava.Data
                     await friendsService.AddFriendAsync(defaultUser.Id, friendId);
                 }
 
+                // Randomly assign friends to each user
+                foreach (var userId in userIds)
+                {
+                    var numberOfFriends = random.Next(3, 8); // Random number of friends between 3 and 7
+                    var friends = userIds
+                        .Where(id => id != userId) // Exclude the user itself
+                        .OrderBy(x => random.Next())
+                        .Take(numberOfFriends)
+                        .ToList();
+
+                    foreach (var friendId in friends)
+                    {
+                        await friendsService.AddFriendAsync(userId, friendId);
+                    }
+                }
+
                 // Insert random number of games for each user, including the default user
                 var allUsers = new List<string>(userIds) { defaultUser.Id };
                 foreach (var userId in allUsers)
                 {
-                    var numberOfGames = random.Next(5, 21); // Random number of games between 5 and 20
+                    var numberOfGames = random.Next(27, 50); // Random number of games between 27 and 49
+                    var opponentWinCounts = new Dictionary<string, int>();
+                    var opponentLossCounts = new Dictionary<string, int>();
+
                     for (int i = 0; i < numberOfGames; i++)
                     {
+                        var opponentId = userIds[random.Next(userIds.Count)];
+                        // Ensure opponent is not the same as the user
+                        while (opponentId == userId)
+                        {
+                            opponentId = userIds[random.Next(userIds.Count)];
+                        }
+
+                        bool isWin = random.Next(0, 2) == 1;
+
+                        // Adjust win/loss to avoid 50% win rate against the opponent
+                        if (!opponentWinCounts.ContainsKey(opponentId))
+                        {
+                            opponentWinCounts[opponentId] = 0;
+                            opponentLossCounts[opponentId] = 0;
+                        }
+
+                        if (opponentWinCounts[opponentId] == opponentLossCounts[opponentId])
+                        {
+                            isWin = random.Next(0, 2) == 0;
+                        }
+
+                        if (isWin)
+                        {
+                            opponentWinCounts[opponentId]++;
+                        }
+                        else
+                        {
+                            opponentLossCounts[opponentId]++;
+                        }
+
                         var game = new Game
                         {
                             UserId = userId,
-                            IsWin = random.Next(0, 2) == 1, // Randomly true or false
+                            OpponentId = opponentId,
+                            IsWin = isWin,
                             DatePlayed = DateTime.Now.AddDays(-random.Next(1, 365)) // Random date within the last year
                         };
                         await context.Games.AddAsync(game);
