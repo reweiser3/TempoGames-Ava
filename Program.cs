@@ -1,6 +1,7 @@
 using Ava.Components;
 using Ava.Components.Account;
 using Ava.Data;
+using Ava.Interfaces;
 using Ava.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FriendsService>();
+builder.Services.AddScoped<IGameStatsService, GameStatsService>();
 
 var app = builder.Build();
 

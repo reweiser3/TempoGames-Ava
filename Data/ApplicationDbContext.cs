@@ -1,4 +1,5 @@
 using Ava.Data.Friendship;
+using Ava.Data.Games;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace Ava.Data
 
         // Define the Friends DbSet
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<Game> Games { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

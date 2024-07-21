@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Ava.Data.Games;
 
 namespace Ava.Data
 {
@@ -17,9 +18,9 @@ namespace Ava.Data
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var friendsService = scope.ServiceProvider.GetRequiredService<FriendsService>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             // Ensure database is created
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await context.Database.MigrateAsync();
 
             // Create default roles
@@ -136,6 +137,24 @@ namespace Ava.Data
                 {
                     await friendsService.AddFriendAsync(defaultUser.Id, friendId);
                 }
+
+                // Insert random number of games for each user, including the default user
+                var allUsers = new List<string>(userIds) { defaultUser.Id };
+                foreach (var userId in allUsers)
+                {
+                    var numberOfGames = random.Next(5, 21); // Random number of games between 5 and 20
+                    for (int i = 0; i < numberOfGames; i++)
+                    {
+                        var game = new Game
+                        {
+                            UserId = userId,
+                            IsWin = random.Next(0, 2) == 1, // Randomly true or false
+                            DatePlayed = DateTime.Now.AddDays(-random.Next(1, 365)) // Random date within the last year
+                        };
+                        await context.Games.AddAsync(game);
+                    }
+                }
+                await context.SaveChangesAsync();
             }
         }
     }
