@@ -6,9 +6,10 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using Ava.Data
+@using Ava.Interfaces
 
 @inject UserManager<ApplicationUser> UserManager
-@inject IEmailSender<ApplicationUser> EmailSender
+@inject IEmailSender EmailSender
 @inject IdentityUserAccessor UserAccessor
 @inject NavigationManager NavigationManager
 
@@ -16,9 +17,9 @@
 
 <h3>Manage email</h3>
 
-<StatusMessage Message="@message"/>
-<div class="row">
-    <div class="col-md-6">
+<StatusMessage Message="@message" />
+<div class="flex">
+    <div class="w-1/2">
         <form @onsubmit="OnSendEmailVerificationAsync" @formname="send-verification" id="send-verification-form" method="post">
             <AntiforgeryToken />
         </form>

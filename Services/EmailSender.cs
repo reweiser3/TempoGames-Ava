@@ -1,14 +1,13 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using Ava.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using Ava.Interfaces;
 
 namespace Ava.Services
 {
-    public interface IEmailSender
-    {
-        Task SendEmailAsync(string email, string subject, string message);
-    }
-
     public class EmailSender : IEmailSender
     {
         private readonly IConfiguration _configuration;

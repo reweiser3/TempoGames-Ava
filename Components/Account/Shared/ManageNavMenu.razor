@@ -3,27 +3,27 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage" Match="NavLinkMatch.All">Profile</NavLink>
+<ul class="flex flex-col space-y-2">
+    <li>
+        <NavLink class="block px-4 py-2 rounded-lg text-primary hover:bg-blue-100 hover:text-blue-800" href="Account/Manage" Match="NavLinkMatch.All">Profile</NavLink>
     </li>
-    <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/Email">Email</NavLink>
+    <li>
+        <NavLink class="block px-4 py-2 rounded-lg text-primary hover:bg-blue-100 hover:text-blue-800" href="Account/Manage/Email">Email</NavLink>
     </li>
-    <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/ChangePassword">Password</NavLink>
+    <li>
+        <NavLink class="block px-4 py-2 rounded-lg text-primary hover:bg-blue-100 hover:text-blue-800" href="Account/Manage/ChangePassword">Password</NavLink>
     </li>
     @if (hasExternalLogins)
     {
-        <li class="nav-item">
-            <NavLink class="nav-link" href="Account/Manage/ExternalLogins">External logins</NavLink>
+        <li>
+            <NavLink class="block px-4 py-2 rounded-lg text-primary hover:bg-blue-100 hover:text-blue-800" href="Account/Manage/ExternalLogins">External logins</NavLink>
         </li>
     }
-    <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/TwoFactorAuthentication">Two-factor authentication</NavLink>
+    <li>
+        <NavLink class="block px-4 py-2 rounded-lg text-primary hover:bg-blue-100 hover:text-blue-800" href="Account/Manage/TwoFactorAuthentication">Two-factor authentication</NavLink>
     </li>
-    <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/PersonalData">Personal data</NavLink>
+    <li>
+        <NavLink class="block px-4 py-2 rounded-lg text-primary hover:bg-blue-100 hover:text-blue-800" href="Account/Manage/PersonalData">Personal data</NavLink>
     </li>
 </ul>
 

@@ -2,17 +2,21 @@
 
 @layout AccountLayout
 
-<h1>Manage your account</h1>
+<div class="flex justify-center">
+    <div class="w-4/5">
+        <h1 class="text-2xl font-bold">Manage your account</h1>
 
-<div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <ManageNavMenu />
-        </div>
-        <div class="col-md-9">
-            @Body
+        <div>
+            <h2 class="text-xl font-semibold mt-4">Change your account settings</h2>
+            <hr class="my-4 border-gray-300" />
+            <div class="flex">
+                <div class="w-1/4">
+                    <ManageNavMenu />
+                </div>
+                <div class="w-3/4 ml-2">
+                    @Body
+                </div>
+            </div>
         </div>
     </div>
 </div>
