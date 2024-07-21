@@ -1,5 +1,6 @@
 ﻿using Ava.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -79,6 +80,28 @@ public class UserService
         {
             _logger.LogError(ex, "An error occurred while updating the user with ID {UserId}.", user.Id);
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Gets all users asynchronously.
+    /// </summary>
+    /// <returns>A task representing the asynchronous operation, with a list of ApplicationUser as the result.</returns>
+    /// <exception cref="Exception">Throws an exception if an error occurs while getting all users.</exception>
+    public async Task<List<ApplicationUser>> GetAllUsersAsync()
+    {
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            try
+            {
+                return await userManager.Users.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting all users.");
+                throw;
+            }
         }
     }
 }
