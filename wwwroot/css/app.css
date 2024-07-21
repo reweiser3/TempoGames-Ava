@@ -1283,6 +1283,10 @@ input:checked + .toggle-bg {
   height: 0.75rem;
 }
 
+.h-36 {
+  height: 9rem;
+}
+
 .h-4 {
   height: 1rem;
 }
@@ -2545,24 +2549,12 @@ h1:focus {
     display: none;
   }
 
-  .md\:h-auto {
-    height: auto;
-  }
-
-  .md\:w-48 {
-    width: 12rem;
-  }
-
   .md\:w-64 {
     width: 16rem;
   }
 
   .md\:w-96 {
     width: 24rem;
-  }
-
-  .md\:max-w-xl {
-    max-width: 36rem;
   }
 
   .md\:translate-x-0 {
@@ -2605,10 +2597,6 @@ h1:focus {
 
   .lg\:flex {
     display: flex;
-  }
-
-  .lg\:h-auto {
-    height: auto;
   }
 
   .lg\:w-1\/2 {

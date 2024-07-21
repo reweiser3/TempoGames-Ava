@@ -85,40 +85,41 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="flex justify-center items-center w-full">
-                    <a href="User/@mostFrequentOpponent?.Opponent.Id" class="flex flex-col items-center bg-blue-500 dark:bg-blue-700 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-blue-700 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-primary dark:text-white h-full">
-                        <img class="object-cover w-full rounded-t-lg lg:h-auto md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="images/avatars/@mostFrequentOpponent?.Opponent.ProfilePictureUrl" alt="@mostFrequentOpponent?.Opponent.DisplayName">
-                        <div class="flex flex-col justify-between p-4 leading-normal h-full">
+                <div class="flex justify-center items-center w-full h-full">
+                    <a href="User/@mostFrequentOpponent?.Opponent.Id" class="flex flex-col items-center bg-blue-500 dark:bg-blue-700 border border-gray-200 rounded-lg shadow md:flex-row w-full h-full hover:bg-blue-700 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-primary dark:text-white">
+                        <img class="object-cover w-full rounded-t-lg h-36 md:rounded-none md:rounded-l-lg" src="images/avatars/@mostFrequentOpponent?.Opponent.ProfilePictureUrl" alt="@mostFrequentOpponent?.Opponent.DisplayName">
+                        <div class="flex flex-col justify-between p-4 leading-normal w-full h-full">
                             <div class="mb-2 tracking-tight text-white dark:text-white truncate">@mostFrequentOpponent?.Opponent.DisplayName</div>
-                            <div class="mb-3 font-normal text-white dark:text-gray-400 text-md">@mostFrequentOpponent?.Wins (W) | @mostFrequentOpponent?.Losses (L)</div>
+                            <div class="font-normal text-white dark:text-gray-400 text-md">@mostFrequentOpponent?.Wins (W) | @mostFrequentOpponent?.Losses (L)</div>
                             <div class="text-white text-lg">@mostFrequentOpponent?.Percentage%</div>
                             <div class="text-white dark:text-primary text-sm">@TimeHelper.GetLastPlayedText(mostFrequentOpponent?.LastPlayed)</div>
                         </div>
                     </a>
                 </div>
-                <div class="flex justify-center items-center w-full">
-                    <a href="User/@mostDifficultOpponent?.Opponent.Id" class="flex flex-col items-center bg-red-500 dark:bg-red-700 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-red-700 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-primary dark:text-white h-full">
-                        <img class="object-cover w-full rounded-t-lg lg:h-auto md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="images/avatars/@mostDifficultOpponent?.Opponent.ProfilePictureUrl" alt="@mostDifficultOpponent?.Opponent.DisplayName">
-                        <div class="flex flex-col justify-between p-4 leading-normal h-full">
+                <div class="flex justify-center items-center w-full h-full">
+                    <a href="User/@mostDifficultOpponent?.Opponent.Id" class="flex flex-col items-center bg-red-500 dark:bg-red-700 border border-gray-200 rounded-lg shadow md:flex-row w-full h-full hover:bg-red-700 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-primary dark:text-white">
+                        <img class="object-cover w-full rounded-t-lg h-36 md:rounded-none md:rounded-l-lg" src="images/avatars/@mostDifficultOpponent?.Opponent.ProfilePictureUrl" alt="@mostDifficultOpponent?.Opponent.DisplayName">
+                        <div class="flex flex-col justify-between p-4 leading-normal w-full h-full">
                             <div class="mb-2 tracking-tight text-white dark:text-white truncate">@mostDifficultOpponent?.Opponent.DisplayName</div>
-                            <div class="mb-3 font-normal text-white dark:text-gray-400">@mostDifficultOpponent?.Wins (W) | @mostDifficultOpponent?.Losses (L)</div>
+                            <div class="font-normal text-white dark:text-gray-400">@mostDifficultOpponent?.Wins (W) | @mostDifficultOpponent?.Losses (L)</div>
                             <div class="text-white text-lg">@mostDifficultOpponent?.Percentage%</div>
                             <div class="text-white dark:text-primary text-sm">@TimeHelper.GetLastPlayedText(mostDifficultOpponent?.LastPlayed)</div>
                         </div>
                     </a>
                 </div>
-                <div class="flex justify-center items-center w-full">
-                    <a href="User/@mostEasiestOpponent?.Opponent.Id" class="flex flex-col items-center bg-green-500 dark:bg-green-700 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-green-700 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-primary dark:text-white h-full">
-                        <img class="object-cover w-full rounded-t-lg lg:h-auto md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src="images/avatars/@mostEasiestOpponent?.Opponent.ProfilePictureUrl" alt="@mostEasiestOpponent?.Opponent.DisplayName">
-                        <div class="flex flex-col justify-between p-4 leading-normal h-full">
+                <div class="flex justify-center items-center w-full h-full">
+                    <a href="User/@mostEasiestOpponent?.Opponent.Id" class="flex flex-col items-center bg-green-500 dark:bg-green-700 border border-gray-200 rounded-lg shadow md:flex-row w-full h-full hover:bg-green-700 hover:text-white dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-primary dark:text-white">
+                        <img class="object-cover w-full rounded-t-lg h-36 md:rounded-none md:rounded-l-lg" src="images/avatars/@mostEasiestOpponent?.Opponent.ProfilePictureUrl" alt="@mostEasiestOpponent?.Opponent.DisplayName">
+                        <div class="flex flex-col justify-between p-4 leading-normal w-full h-full">
                             <div class="mb-2 tracking-tight text-white dark:text-white truncate">@mostEasiestOpponent?.Opponent.DisplayName</div>
-                            <div class="mb-3 font-normal text-white dark:text-gray-400">@mostEasiestOpponent?.Wins (W) | @mostEasiestOpponent?.Losses (L)</div>
+                            <div class="font-normal text-white dark:text-gray-400">@mostEasiestOpponent?.Wins (W) | @mostEasiestOpponent?.Losses (L)</div>
                             <div class="text-white text-lg">@mostEasiestOpponent?.Percentage%</div>
                             <div class="text-white dark:text-primary text-sm">@TimeHelper.GetLastPlayedText(mostEasiestOpponent?.LastPlayed)</div>
                         </div>
                     </a>
                 </div>
             </div>
+
         }
     </div>
     <div>
