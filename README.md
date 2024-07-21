@@ -29,4 +29,4 @@
     - Red Card = Your most difficult opponent
     - Green Card = Your easiest opponent
 - Your Friends Online list - This list is really just your 'Friends' list that are other application users. Clicking the star beside the 
-  friend will make them a favorite and resort the list to put them on top.
+  friend will make them a favorite and resort the list to put them on top then ordered by last, first.
