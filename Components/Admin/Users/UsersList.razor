@@ -62,6 +62,7 @@
                                     <tr>
                                         <th scope="col" class="px-4 py-3">Avatar</th>
                                         <th scope="col" class="px-4 py-3">Name</th>
+                                        <th scope="col">Age</th>
                                         <th scope="col" class="px-4 py-3">Gamertag</th>
                                         <th scope="col" class="px-4 py-3">Gender</th>
                                         <th scope="col" class="px-4 py-3">City</th>
@@ -91,6 +92,7 @@
                                                 <img class="h-10 w-10 rounded-full object-cover" src="@profilePic" alt="Avatar">
                                             </td>
                                             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">@user.DisplayName</th>
+                                            <th class="px-4 py-3">@AgeCalculator.CalculateAge(user.Birthdate)</th>
                                             <td class="px-4 py-3">@user.Gamertag</td>
                                             <td class="px-4 py-3">@user.Gender</td>
                                             <td class="px-4 py-3">@user.City</td>

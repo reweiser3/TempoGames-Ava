@@ -116,4 +116,31 @@ public class UserService
             }
         }
     }
+
+    /// <summary>
+    /// Gets the user's friends asynchronously.
+    /// </summary>
+    /// <param name="userId">The user id we are search for friends</param>
+    /// <returns>a list of application users that are friends with the selected user</returns>
+    public async Task<List<ApplicationUser>> GetFriendsAsync(string userId)
+    {
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            try
+            {
+                var user = await userManager.Users.Include(u => u.Friendships)
+                    .ThenInclude(f => f.FriendUser)
+                    .FirstOrDefaultAsync(u => u.Id == userId);
+
+                return user?.Friendships.Select(f => f.FriendUser).ToList() ?? new List<ApplicationUser>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while getting friends for user ID {UserId}.", userId);
+                throw;
+            }
+        }
+    }
+
 }

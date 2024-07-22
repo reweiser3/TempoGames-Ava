@@ -1,5 +1,6 @@
 ﻿@if (User != default)
 {
+    var userAge = AgeCalculator.CalculateAge(User.Birthdate);
     <nav class="flex mb-1" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
             <li class="inline-flex items-center">
@@ -10,14 +11,38 @@
                     Users
                 </a>
             </li>
-            <li aria-current="page">
-                <div class="flex items-center">
-                    <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
-                    </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">@User.DisplayName</span>
-                </div>
-            </li>
+            @if (string.IsNullOrEmpty(PageName))
+            {
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">@User.DisplayName</span>
+                    </div>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <div class="flex items-center">
+                        <a href="Admin/User/@User.Id/" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                            <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                            <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">@User.DisplayName</span>
+                        </a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                        </svg>
+                        <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">@PageName</span>
+                    </div>
+                </li>
+            }
         </ol>
     </nav>
     <div class="flex justify-center">
@@ -26,7 +51,7 @@
                 <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <a href="Admin/User/@User.Id/" class="flex items-center">
                         <img src="images/avatars/@User.ProfilePictureUrl" class="mr-3 h-14 rounded" alt="@User.DisplayName" title="@User.DisplayName" />
-                        <span class="self-center text-xl text-primary font-semibold whitespace-nowrap dark:text-white">@User.DisplayName</span>
+                        <span class="self-center text-xl text-primary font-semibold whitespace-nowrap dark:text-white">@User.DisplayName</span> <span class="ml-3 self-center text-xs text-white">@userAge old</span>
                     </a>
                     <div class="flex items-center lg:order-2">
                         <button type="button" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
@@ -64,4 +89,7 @@
 {
     [Parameter]
     public ApplicationUser User { get; set; } = default!;
+
+    [Parameter]
+    public string PageName { get; set; } = string.Empty;
 }

@@ -9,7 +9,7 @@
 
 <AuthorizeView Roles="Admin" Context="authContext">
     <Authorized Context="authorizedContext">
-        <UserNavBar User="user" />
+        <UserNavBar User="user" PageName="Profile" />
         <div class="flex justify-center mt-1">
             <div class="w-4/5">
                 @if (userInputModel != null)
@@ -22,71 +22,72 @@
                     }
 
                     <div class="flex flex-col space-y-4">
+                        
+
                         <EditForm Model="userInputModel" OnValidSubmit="HandleValidSubmit">
-                            <DataAnnotationsValidator />
-                            <ValidationSummary />
-
-                            <div class="mb-3">
-                                <label for="given" class="form-label">Given Name</label>
-                                <InputText id="given" class="form-control" @bind-Value="userInputModel.Given" required />
+                            <DataAnnotationsValidator/>
+                            <ValidationSummary/>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="p-2">
+                                    <label for="given" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Given Name</label>
+                                    <InputText id="given" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Given" required/>
+                                </div>
+                                <div class="p-2">
+                                    <label for="middle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
+                                    <InputText id="middle" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Middle" />
+                                </div>
+                                <div class="p-2">
+                                    <label for="family" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Family Name</label>
+                                    <InputText id="family" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Family" required />
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="middle" class="form-label">Middle Name</label>
-                                <InputText id="middle" class="form-control" @bind-Value="userInputModel.Middle" />
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="p-2">
+                                    <label for="birthdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthdate</label>
+                                    <InputDate id="birthdate" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Birthdate" required />
+                                </div>
+                                <div class="p-2">
+                                    <label for="gamertag" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gamertag</label>
+                                    <InputText id="gamertag" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Gamertag" required />
+                                </div>
+                                <div class="p-2">
+                                    <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+                                    <InputSelect id="gender" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Gender">
+                                        @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                                        {
+                                            <option value="@gender">@gender</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="p-2">
+                                    <label for="city" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">City</label>
+                                    <InputText id="city" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.City" />
+                                </div>
+                                <div class="p-2">
+                                    <label for="state" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">State</label>
+                                    <InputText id="state" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.State" />
+                                </div>
+                                <div class="p-2">
+                                    <label for="country" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+                                    <InputSelect id="country" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.Country" required>
+                                        @foreach (var country in Enum.GetValues(typeof(Country)))
+                                        {
+                                            <option value="@country">@EnumHelper.GetEnumDescription((Country)country)</option>
+                                        }
+                                    </InputSelect>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="family" class="form-label">Family Name</label>
-                                <InputText id="family" class="form-control" @bind-Value="userInputModel.Family" required />
+                            <div class="mb-3" style="display: none;">
+                                <label for="profilePictureUrl" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture URL</label>
+                                <InputText id="profilePictureUrl" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @bind-Value="userInputModel.ProfilePictureUrl" />
                             </div>
 
-                            <div class="mb-3">
-                                <label for="birthdate" class="form-label">Birthdate</label>
-                                <InputDate id="birthdate" class="form-control" @bind-Value="userInputModel.Birthdate" required />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="gamertag" class="form-label">Gamertag</label>
-                                <InputText id="gamertag" class="form-control" @bind-Value="userInputModel.Gamertag" required />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <InputSelect id="gender" class="form-control" @bind-Value="userInputModel.Gender">
-                                    @foreach (var gender in Enum.GetValues(typeof(Gender)))
-                                    {
-                                        <option value="@gender">@gender</option>
-                                    }
-                                </InputSelect>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <InputText id="city" class="form-control" @bind-Value="userInputModel.City" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="state" class="form-label">State</label>
-                                <InputText id="state" class="form-control" @bind-Value="userInputModel.State" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="country" class="form-label">Country</label>
-                                <InputSelect id="country" class="form-control" @bind-Value="userInputModel.Country" required>
-                                    @foreach (var country in Enum.GetValues(typeof(Country)))
-                                    {
-                                        <option value="@country">@EnumHelper.GetEnumDescription((Country)country)</option>
-                                    }
-                                </InputSelect>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="profilePictureUrl" class="form-label">Profile Picture URL</label>
-                                <InputText id="profilePictureUrl" class="form-control" @bind-Value="userInputModel.ProfilePictureUrl" />
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="bg-primary text-white pl-2 py-2 px-4 rounded hover:bg-primary-500">Save</button>
                         </EditForm>
                     </div>
                 }
@@ -109,6 +110,7 @@
 
     private ApplicationUserInputModel userInputModel;
     private ApplicationUser user;
+    
     private bool userUpdated = false;
 
     protected override async Task OnInitializedAsync()
