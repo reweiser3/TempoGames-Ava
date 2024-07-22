@@ -1,4 +1,5 @@
-﻿using Ava.Data.Users;
+﻿using Ava.Data;
+using Ava.Data.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace Ava.Interfaces
@@ -41,5 +42,12 @@ namespace Ava.Interfaces
         /// <param name="id">The role identifier.</param>
         /// <returns><c>true</c> if the role was deleted; otherwise, <c>false</c>.</returns>
         Task<bool> DeleteRoleAsync(string id);
+
+        /// <summary>
+        /// Gets all users in a specified role.
+        /// </summary>
+        /// <param name="roleName">The name of the role.</param>
+        /// <returns>A data transfer object containing the role and a list of users in the specified role.</returns>
+        Task<RoleDescriptionWithUsers> GetUsersInRoleAsync(string roleName);
     }
 }

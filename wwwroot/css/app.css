@@ -1975,10 +1975,6 @@ input:checked + .toggle-bg {
   padding-bottom: 1.25rem;
 }
 
-.pb-4 {
-  padding-bottom: 1rem;
-}
-
 .pl-10 {
   padding-left: 3rem;
 }

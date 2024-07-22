@@ -66,7 +66,7 @@
                                     <tbody>
                                         @foreach (var role in roles)
                                         {
-                                            <tr class="border-b dark:border-gray-700 hover:bg-gray-100 cursor-pointer" @onclick="() => NavigateToRole(role.Role.Id)">
+                                            <tr class="border-b dark:border-gray-700 hover:bg-gray-100 cursor-pointer" @onclick="() => NavigateToRole(role.Role.Name)">
                                                 <td class="px-4 py-3">@role.Role.Name</td>
                                                 <td class="px-4 py-3">@role.UserCount</td>
                                             </tr>
@@ -121,16 +121,16 @@
     /// </summary>
     private void NavigateToAddRole()
     {
-        Navigation.NavigateTo("Admin/Roles/New");
+        Navigation.NavigateTo("Admin/Role/New");
     }
 
     /// <summary>
     /// Navigates to the role detail page.
     /// </summary>
-    /// <param name="roleId">The ID of the role to view.</param>
-    private void NavigateToRole(string roleId)
+    /// <param name="roleName">The name of the role to view.</param>
+    private void NavigateToRole(string roleName)
     {
-        Navigation.NavigateTo($"/Admin/Roles/{roleId}/");
+        Navigation.NavigateTo($"/Admin/Roles/{roleName}/");
     }
 
     /// <summary>
