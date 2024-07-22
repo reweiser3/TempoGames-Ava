@@ -34,3 +34,27 @@ h1:focus {
 .card-hover:hover img {
     filter: brightness(0.8);
 }
+
+.bg-darkred {
+    background-color: #8B0000; /* DarkRed */
+}
+
+.hover\:bg-darkred-700:hover {
+    background-color: #7A0000; /* Slightly darker red */
+}
+
+.focus\:ring-darkred-300:focus {
+    box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.3); /* DarkRed with 30% opacity */
+}
+
+.dark\:bg-darkred-600 {
+    background-color: #6A0000; /* Even darker red */
+}
+
+.dark\:hover\:bg-darkred-700:hover {
+    background-color: #5A0000; /* Even darker red on hover */
+}
+
+.dark\:focus\:ring-darkred-800:focus {
+    box-shadow: 0 0 0 4px rgba(106, 0, 0, 0.8); /* Even darker red with 80% opacity */
+}
