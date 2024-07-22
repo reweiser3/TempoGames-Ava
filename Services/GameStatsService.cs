@@ -15,11 +15,20 @@ namespace Ava.Services
     {
         private readonly IServiceScopeFactory _scopeFactory;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameStatsService"/> class.
+        /// </summary>
+        /// <param name="scopeFactory">The service scope factory.</param>
         public GameStatsService(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
         }
 
+        /// <summary>
+        /// Gets the total number of games played by a user.
+        /// </summary>
+        /// <param name="userId">The user ID.</param>
+        /// <returns>The total number of games played.</returns>
         public async Task<int> GetTotalGamesPlayedAsync(string userId)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -27,6 +36,11 @@ namespace Ava.Services
             return await context.Games.CountAsync(g => g.UserId == userId);
         }
 
+        /// <summary>
+        /// Gets the total number of wins for a user.
+        /// </summary>
+        /// <param name="userId">The user ID.</param>
+        /// <returns>The total number of wins.</returns>
         public async Task<int> GetTotalWinsAsync(string userId)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -34,6 +48,11 @@ namespace Ava.Services
             return await context.Games.CountAsync(g => g.UserId == userId && g.IsWin);
         }
 
+        /// <summary>
+        /// Gets the total number of losses for a user.
+        /// </summary>
+        /// <param name="userId">The user ID.</param>
+        /// <returns>The total number of losses.</returns>
         public async Task<int> GetTotalLossesAsync(string userId)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -41,6 +60,11 @@ namespace Ava.Services
             return await context.Games.CountAsync(g => g.UserId == userId && !g.IsWin);
         }
 
+        /// <summary>
+        /// Gets the most frequent opponent for a user.
+        /// </summary>
+        /// <param name="userId">The user ID.</param>
+        /// <returns>The statistics of the most frequent opponent.</returns>
         public async Task<OpponentStats> GetMostFrequentOpponentAsync(string userId)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -77,6 +101,11 @@ namespace Ava.Services
             };
         }
 
+        /// <summary>
+        /// Gets the easiest opponent for a user.
+        /// </summary>
+        /// <param name="userId">The user ID.</param>
+        /// <returns>The statistics of the easiest opponent.</returns>
         public async Task<OpponentStats> GetEasiestOpponentAsync(string userId)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -112,6 +141,11 @@ namespace Ava.Services
             };
         }
 
+        /// <summary>
+        /// Gets the most difficult opponent for a user.
+        /// </summary>
+        /// <param name="userId">The user ID.</param>
+        /// <returns>The statistics of the most difficult opponent.</returns>
         public async Task<OpponentStats> GetMostDifficultOpponentAsync(string userId)
         {
             using var scope = _scopeFactory.CreateScope();
