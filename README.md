@@ -14,8 +14,7 @@
   While technically a third party library, I felt it was within the confines of this code test and has no true bearing on my abilities to write
   those libraries if required.
 - In order to provide a true feel for how it would be to create the user I did have to use an email service provider but not making use of a
-  a Nugget package to connect, we use the standard SMTP sender with SendGrid. APIKey provided in demo code. This could be swapped out for any
-  SMTP provider that your desktop can connect to that is not prohibited by firewall.
+  a Nugget package to connect, we use the standard SMTP sender with SendGrid. The APIKey provided in the demo app for sendgrid is invalid but could be swapped.
 - The database is initialized on first run. An Admin and Player role are created. Data populated is all fake:
   The default admin account is below and is in the role admin. The account below is already in the admin role.
   You will get a different side navigation bar based on your role.
