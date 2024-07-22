@@ -1,0 +1,133 @@
+﻿@page "/Account/Manage/Avatar"
+@using Microsoft.AspNetCore.Identity
+@using Ava.Data
+@using Microsoft.AspNetCore.Components.Forms
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+@inject IWebHostEnvironment WebHostEnvironment
+@inject ILogger<Avatar> Logger
+
+<PageTitle>Upload Avatar</PageTitle>
+
+<h3 class="text-2xl font-semibold mb-4">Upload Avatar</h3>
+<StatusMessage />
+
+<div class="flex justify-center">
+    <div class="w-full max-w-md">
+        <EditForm Model="Input" OnValidSubmit="HandleValidSubmit" FormName="avatarForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-red-500" role="alert" />
+
+            <div class="form-group">
+                <label for="avatarUpload" class="form-label">Upload Avatar</label>
+                <InputFile OnChange="HandleFileSelected" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" disabled="@IsUploading">Upload</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private ApplicationUser user = default!;
+    private string? profilePictureUrl;
+    private bool IsUploading = false;
+    private InputModel Input { get; set; } = new();
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+            profilePictureUrl = user.ProfilePictureUrl;
+            Logger.LogInformation("User initialized successfully with ProfilePictureUrl: {ProfilePictureUrl}", profilePictureUrl);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error initializing user");
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (Input.File != null)
+        {
+            IsUploading = true;
+
+            try
+            {
+                // Save the file and get its URL
+                var fileUrl = await SaveFile(Input.File);
+
+                if (!string.IsNullOrEmpty(fileUrl))
+                {
+                    user.ProfilePictureUrl = fileUrl;
+                    var result = await UserManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        Logger.LogInformation("Profile picture updated successfully to {FileUrl}", fileUrl);
+                        await SignInManager.RefreshSignInAsync(user);
+                        RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
+                    }
+                    else
+                    {
+                        Logger.LogWarning("Failed to update user profile: {Errors}", result.Errors);
+                        RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to update profile picture.", HttpContext);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error saving file or updating user profile");
+                RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to update profile picture.", HttpContext);
+            }
+            finally
+            {
+                IsUploading = false;
+            }
+        }
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        Input.File = e.File;
+        Logger.LogInformation("File selected: {FileName}", e.File.Name);
+    }
+
+    private async Task<string> SaveFile(IBrowserFile file)
+    {
+        try
+        {
+            var extension = Path.GetExtension(file.Name);
+            var newFileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "images", "avatars", newFileName);
+
+            Logger.LogInformation("Saving file to {FilePath}", filePath);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+            await using var fileStream = new FileStream(filePath, FileMode.Create);
+            await file.OpenReadStream().CopyToAsync(fileStream);
+
+            Logger.LogInformation("File saved successfully as {FileName}", newFileName);
+
+            return $"images/avatars/{newFileName}";
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error saving file");
+            return string.Empty;
+        }
+    }
+
+    private class InputModel
+    {
+        public IBrowserFile? File { get; set; }
+    }
+}
