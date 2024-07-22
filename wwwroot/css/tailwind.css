@@ -58,3 +58,12 @@ h1:focus {
 .dark\:focus\:ring-darkred-800:focus {
     box-shadow: 0 0 0 4px rgba(106, 0, 0, 0.8); /* Even darker red with 80% opacity */
 }
+
+#default-modal {
+    display: block !important;
+}
+
+[data-modal] {
+    display: none; /* Hide all modals by default */
+}
+

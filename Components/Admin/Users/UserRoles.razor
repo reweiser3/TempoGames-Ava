@@ -1,0 +1,99 @@
+﻿@page "/Admin/User/{userId}/Roles"
+@inject UserService UserService
+@using Ava.Data.Users
+@using Microsoft.AspNetCore.Authorization
+@using Ava.Components.Account.Shared
+@using Ava.Components.Admin.Users.Components
+@using Microsoft.AspNetCore.Identity
+@inherits Ava.Components.Bases.LayoutBase
+@attribute [Authorize(Roles = "Admin")]
+
+<AuthorizeView Roles="Admin" Context="authContext">
+    <Authorized Context="authorizedContext">
+        <UserNavBar User="user" PageName="Roles" />
+        <div class="flex justify-center mt-1">
+            <div class="w-4/5">
+                @if (user != null)
+                {
+                    @if (userUpdated)
+                    {
+                        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 w-full" role="alert">
+                            <span class="font-medium">Success!</span> The user account has been updated.
+                        </div>
+                    }
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach (var role in roles)
+                            {
+                                var isChecked = roleSelections[role.Name];
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@role.Name</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <input type="checkbox" checked="@isChecked"
+                                               @onchange="(e) => OnRoleCheckboxChanged(role.Name, (bool)((ChangeEventArgs)e).Value)" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>Loading...</p>
+                }
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public string userId { get; set; } = default!;
+
+    private ApplicationUser user;
+
+    private List<IdentityRole> roles = new List<IdentityRole>();
+    private Dictionary<string, bool> roleSelections = new Dictionary<string, bool>();
+    private bool userUpdated = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (!string.IsNullOrEmpty(userId))
+        {
+            user = await UserService.FindUserByIdAsync(userId);
+            roles = await UserService.GetAllRolesAsync(); // Ensure you get roles
+            foreach (var role in roles)
+            {
+                roleSelections[role.Name] = await UserService.IsUserInRoleAsync(userId, role.Name);
+            }
+        }
+    }
+
+    private async Task OnRoleCheckboxChanged(string roleName, bool isChecked)
+    {
+        var isInRole = await UserService.IsUserInRoleAsync(userId, roleName);
+
+        if (isChecked && !isInRole)
+        {
+            await UserService.AddToRoleAsync(userId, roleName);
+        }
+        else if (!isChecked && isInRole)
+        {
+            await UserService.RemoveFromRoleAsync(userId, roleName);
+        }
+
+        roleSelections[roleName] = isChecked;
+        userUpdated = true; // Optional: Set to true to display a success message
+    }
+}

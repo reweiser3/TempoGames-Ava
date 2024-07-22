@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +68,10 @@ namespace Ava.Services
         /// <returns>The added role.</returns>
         public async Task<IdentityRole> AddRoleAsync(IdentityRole role)
         {
+            // Set the NormalizedName and ConcurrencyStamp
+            role.NormalizedName = role.Name.ToUpperInvariant();
+            role.ConcurrencyStamp = Guid.NewGuid().ToString();
+
             _context.Roles.Add(role);
             await _context.SaveChangesAsync();
             return role;

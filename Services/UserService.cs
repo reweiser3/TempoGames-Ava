@@ -12,12 +12,13 @@ public class UserService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<UserService> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
-
-    public UserService(UserManager<ApplicationUser> userManager, ILogger<UserService> logger, IServiceScopeFactory scopeFactory)
+    private readonly RoleManager<IdentityRole> _roleManager;
+    public UserService(UserManager<ApplicationUser> userManager, ILogger<UserService> logger, IServiceScopeFactory scopeFactory, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _logger = logger;
         _scopeFactory = scopeFactory;
+        _roleManager = roleManager;
     }
 
     /// <summary>
@@ -182,6 +183,57 @@ public class UserService
         {
             _logger.LogError(ex, "An error occurred while updating the profile picture for user with ID {UserId}.", userId);
             throw;
+        }
+    }
+
+    /// <summary>
+    /// Retrieves all roles asynchronously.
+    /// </summary>
+    /// <returns>A list of IdentityRole objects.</returns>
+    public async Task<List<IdentityRole>> GetAllRolesAsync()
+    {
+        return await _roleManager.Roles.ToListAsync();
+    }
+
+    /// <summary>
+    /// Checks if the user is in a role.
+    /// </summary>
+    /// <param name="userId">The user ID.</param>
+    /// <param name="roleName">The role name.</param>
+    /// <returns>True if the user is in the role, otherwise false.</returns>
+    public async Task<bool> IsUserInRoleAsync(string userId, string roleName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user != null && await _userManager.IsInRoleAsync(user, roleName);
+    }
+
+    /// <summary>
+    /// Add the user to the role
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="roleName"></param>
+    /// <returns></returns>
+    public async Task AddToRoleAsync(string userId, string roleName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            await _userManager.AddToRoleAsync(user, roleName);
+        }
+    }
+
+    /// <summary>
+    /// Removes the user from the selected role
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="roleName"></param>
+    /// <returns></returns>
+    public async Task RemoveFromRoleAsync(string userId, string roleName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            await _userManager.RemoveFromRoleAsync(user, roleName);
         }
     }
 }
