@@ -1,0 +1,104 @@
+﻿@page "/Admin/User/{userId}/Avatar"
+@inject UserService UserService
+@inject IHttpClientFactory HttpClientFactory
+@using Ava.Data.Users
+@using Microsoft.AspNetCore.Authorization
+@using Ava.Components.Account.Shared
+@using Ava.Components.Admin.Users.Components
+@inherits Ava.Components.Bases.LayoutBase
+@attribute [Authorize(Roles = "Admin")]
+
+<AuthorizeView Roles="Admin" Context="authContext">
+    <Authorized Context="authorizedContext">
+        <UserNavBar User="user" PageName="Avatar" />
+        <div class="flex justify-center mt-1">
+            <div class="w-4/5">
+                @if (user != default)
+                {
+                    @if (userUpdated)
+                    {
+                        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 w-full" role="alert">
+                            <span class="font-medium">Success!</span> The user account has been updated.
+                        </div>
+                    }
+
+                    <div class="flex flex-col space-y-4">
+                        <EditForm Model="@user" OnValidSubmit="@HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <InputFile OnChange="@HandleFileSelected" />
+                            <button type="submit" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-500">Save</button>
+                        </EditForm>
+                    </div>
+                }
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public string userId { get; set; } = default!;
+
+    private ApplicationUser user = default!;
+    private bool userUpdated = false;
+    private IBrowserFile selectedFile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (!string.IsNullOrEmpty(userId))
+        {
+            user = await UserService.FindUserByIdAsync(userId);
+        }
+    }
+
+    private void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (selectedFile != null)
+        {
+            // Upload the file to the server
+            await UploadFile(selectedFile);
+        }
+    }
+
+    private async Task UploadFile(IBrowserFile file)
+    {
+        var buffer = new byte[file.Size];
+        await file.OpenReadStream().ReadAsync(buffer);
+
+        var formContent = new MultipartFormDataContent();
+        formContent.Add(new ByteArrayContent(buffer), "file", file.Name);
+
+        var client = HttpClientFactory.CreateClient("ApiClient");
+        var response = await client.PostAsync("api/upload", formContent);
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<UploadResult>();
+            if (result != null)
+            {
+                var fileName = result.fileName;
+                var success = await UserService.SetUserProfilePictureAsync(user.Id, fileName); // Save only the file name
+                if (success)
+                {
+                    user.ProfilePictureUrl = fileName; // Update to display the file name
+                    userUpdated = true;
+                }
+            }
+        }
+    }
+
+    private class UploadResult
+    {
+        public string fileName { get; set; }
+    }
+}

@@ -143,4 +143,45 @@ public class UserService
         }
     }
 
+    /// <summary>
+    /// Sets the profile picture URL for a user asynchronously.
+    /// </summary>
+    /// <param name="userId">The ID of the user.</param>
+    /// <param name="profilePictureUrl">The new profile picture URL.</param>
+    /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+    /// <exception cref="Exception">Throws an exception if an error occurs while updating the user.</exception>
+    public async Task<bool> SetUserProfilePictureAsync(string userId, string profilePictureFileName)
+    {
+        try
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                _logger.LogError("User with ID {UserId} not found.", userId);
+                return false;
+            }
+
+            user.ProfilePictureUrl = profilePictureFileName;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("Profile picture for user with ID {UserId} was successfully updated.", userId);
+                return true;
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _logger.LogError("Error updating profile picture for user with ID {UserId}: {ErrorDescription}", userId, error.Description);
+                }
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while updating the profile picture for user with ID {UserId}.", userId);
+            throw;
+        }
+    }
 }
