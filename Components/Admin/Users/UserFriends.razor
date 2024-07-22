@@ -6,7 +6,10 @@
 @using Ava.Components.Admin.Users.Components
 @inherits Ava.Components.Bases.LayoutBase
 @attribute [Authorize(Roles = "Admin")]
-
+@if (user != null)
+{
+    <PageTitle>@user.DisplayName Friends</PageTitle>
+}
 <AuthorizeView Roles="Admin" Context="authContext">
     <Authorized Context="authorizedContext">
         <UserNavBar User="user" PageName="Friends" />
