@@ -1,0 +1,163 @@
+﻿@page "/Account/Manage/Avatar"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Ava.Data
+@using Microsoft.AspNetCore.Components.Forms
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+@inject IWebHostEnvironment WebHostEnvironment
+@inject ILogger<Avatar> Logger
+@inject NavigationManager NavigationManager
+
+<PageTitle>Upload Avatar</PageTitle>
+
+<h3 class="text-2xl font-semibold mb-4">Upload Avatar</h3>
+<StatusMessage />
+
+<div class="flex justify-center">
+    <div class="w-full max-w-md">
+        <EditForm Model="Input" OnValidSubmit="HandleValidSubmit" FormName="avatarForm">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-red-500" role="alert" />
+
+            <div class="form-group">
+                <label for="avatarUpload" class="form-label">Upload Avatar</label>
+                <InputFile OnChange="HandleFileSelected" accept=".png,.jpg" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" disabled="@IsUploading">Save</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private ApplicationUser user = default!;
+    private string? profilePictureUrl;
+    private bool IsUploading = false;
+    private InputModel Input { get; set; } = new();
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await authenticationStateTask;
+            var userClaims = authState.User;
+
+            if (userClaims.Identity.IsAuthenticated)
+            {
+                var userId = userClaims.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                user = await UserManager.FindByIdAsync(userId);
+                profilePictureUrl = user.ProfilePictureUrl;
+                Logger.LogInformation("User initialized successfully with ProfilePictureUrl: {ProfilePictureUrl}", profilePictureUrl);
+            }
+            else
+            {
+                Logger.LogWarning("User is not authenticated");
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error initializing user");
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!string.IsNullOrEmpty(Input.FileUrl))
+        {
+            IsUploading = true;
+
+            try
+            {
+                user.ProfilePictureUrl = Input.FileUrl;
+                var result = await UserManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    Logger.LogInformation("Profile picture updated successfully to {FileUrl}", Input.FileUrl);
+                    await SignInManager.RefreshSignInAsync(user);
+                    NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+                }
+                else
+                {
+                    Logger.LogWarning("Failed to update user profile: {Errors}", result.Errors);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error updating user profile");
+            }
+            finally
+            {
+                IsUploading = false;
+            }
+        }
+    }
+
+    private async void HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        var extension = Path.GetExtension(file.Name).ToLowerInvariant();
+
+        if (extension == ".png" || extension == ".jpg")
+        {
+            IsUploading = true;
+            try
+            {
+                Input.FileUrl = await SaveFile(file);
+                Logger.LogInformation("File selected and uploaded: {FileName}", file.Name);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Error uploading file");
+                Input.FileUrl = null;
+            }
+            finally
+            {
+                IsUploading = false;
+            }
+        }
+        else
+        {
+            Input.FileUrl = null;
+            Logger.LogWarning("Invalid file type selected: {FileName}", file.Name);
+        }
+    }
+
+    private async Task<string> SaveFile(IBrowserFile file)
+    {
+        try
+        {
+            var extension = Path.GetExtension(file.Name);
+            var newFileName = $"{Guid.NewGuid()}{extension}";
+            var filePath = Path.Combine(WebHostEnvironment.WebRootPath, "images", "avatars", newFileName);
+
+            Logger.LogInformation("Saving file to {FilePath}", filePath);
+
+            Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+            await using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None);
+            await file.OpenReadStream().CopyToAsync(fileStream);
+
+            Logger.LogInformation("File saved successfully as {FileName}", newFileName);
+
+            return $"images/avatars/{newFileName}";
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error saving file");
+            return string.Empty;
+        }
+    }
+
+    private class InputModel
+    {
+        public string? FileUrl { get; set; }
+    }
+}

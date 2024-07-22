@@ -133,6 +133,7 @@ namespace Ava.Data
                 foreach (var friendId in selectedFriends)
                 {
                     await friendsService.AddFriendAsync(defaultUser.Id, friendId);
+                    await friendsService.AddFriendAsync(friendId, defaultUser.Id);
                 }
 
                 // Randomly assign friends to each user
