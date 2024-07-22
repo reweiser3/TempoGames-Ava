@@ -1,4 +1,4 @@
-﻿@page "/Admin/Users/{userId}/"
+﻿@page "/Admin/User/{userId}/"
 @inject UserService UserService
 @using Ava.Data
 @using Microsoft.AspNetCore.Authorization
@@ -31,6 +31,24 @@
                     </li>
                 </ol>
             </nav>
+            <div class="flex justify-center">
+                <div class="w-4/5">
+                    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+                        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                            <a href="Admin/User/@user.Id/" class="flex items-center">
+                                <img src="images/avatars/@user.ProfilePictureUrl" class="mr-3 h-14 rounded" alt="@user.DisplayName" title="@user.DisplayName" />
+                                <span class="self-center text-xl text-primary font-semibold whitespace-nowrap dark:text-white">@user.DisplayName</span>
+                            </a>
+
+                        </div>
+                    </nav>
+                    <div>
+                        <div class="flex">
+                            Content
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
     </Authorized>
     <NotAuthorized>

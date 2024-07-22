@@ -1,26 +1,28 @@
-﻿@page "/Admin/Users"
-@using Ava.Data
+﻿@page "/Admin/Roles"
+
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using Ava.Components.Account.Shared
+
 @inherits Ava.Components.Bases.LayoutBase
-@inject UserManager<ApplicationUser> UserManager
+@inject IRoleService RoleService
 @inject NavigationManager Navigation
 @attribute [Authorize(Roles = "Admin")]
-<PageTitle>Users</PageTitle>
+
+<PageTitle>Roles</PageTitle>
 <AuthorizeView Roles="Admin">
     <Authorized>
-        @if (users != null)
+        @if (roles != null)
         {
             <nav class="flex" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                     <li class="inline-flex items-center" aria-current="page">
-                        <a href="Admin/Users" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                        <a href="Admin/Roles" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                             <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
                             </svg>
-                            Users
+                            Roles
                         </a>
                     </li>
                 </ol>
@@ -45,11 +47,11 @@
                                     </form>
                                 </div>
                                 <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                                    <button type="button" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" @onclick="NavigateToAddUser">
+                                    <button type="button" class="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800" @onclick="NavigateToAddRole">
                                         <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                                         </svg>
-                                        Add user
+                                        Add role
                                     </button>
                                 </div>
                             </div>
@@ -57,42 +59,16 @@
                                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
-                                            <th scope="col" class="px-4 py-3">Avatar</th>
                                             <th scope="col" class="px-4 py-3">Name</th>
-                                            <th scope="col" class="px-4 py-3">Gamertag</th>
-                                            <th scope="col" class="px-4 py-3">Gender</th>
-                                            <th scope="col" class="px-4 py-3">City</th>
-                                            <th scope="col" class="px-4 py-3">State</th>
-                                            <th scope="col" class="px-4 py-3">Country</th>
+                                            <th scope="col" class="px-4 py-3">User Count</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var user in users)
+                                        @foreach (var role in roles)
                                         {
-                                            <tr class="border-b dark:border-gray-700 hover:bg-gray-100 cursor-pointer" @onclick="() => NavigateToUser(user.Id)">
-                                                <td class="px-4 py-3">
-                                                    @{
-                                                        var profilePic = "";
-                                                        if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
-                                                        {
-                                                            profilePic = $"images/avatars/{user.ProfilePictureUrl}";
-                                                        }
-                                                        else
-                                                        {
-                                                            // This is technically a violation of the rules of the test but it is a fallback placeholder
-                                                            // not the primary, violation that it breaks the test rules because it is requiring a third party
-                                                            // URL, no other reason
-                                                            profilePic = $"https://eu.ui-avatars.com/api/?name={user.DisplayName}&size=250";
-                                                        }
-                                                    }
-                                                    <img class="h-10 w-10 rounded-full object-cover" src="@profilePic" alt="Avatar">
-                                                </td>
-                                                <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">@user.DisplayName</th>
-                                                <td class="px-4 py-3">@user.Gamertag</td>
-                                                <td class="px-4 py-3">@user.Gender</td>
-                                                <td class="px-4 py-3">@user.City</td>
-                                                <td class="px-4 py-3">@user.State</td>
-                                                <td class="px-4 py-3">@user.Country</td>
+                                            <tr class="border-b dark:border-gray-700 hover:bg-gray-100 cursor-pointer" @onclick="() => NavigateToRole(role.Role.Id)">
+                                                <td class="px-4 py-3">@role.Role.Name</td>
+                                                <td class="px-4 py-3">@role.UserCount</td>
                                             </tr>
                                         }
                                     </tbody>
@@ -114,13 +90,16 @@
 </AuthorizeView>
 
 @code {
-    private List<ApplicationUser> users = new List<ApplicationUser>();
+    private List<RoleWithUserCount> roles = new List<RoleWithUserCount>();
 
+    /// <summary>
+    /// Called when the component is initialized.
+    /// </summary>
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            users = await UserManager.Users.ToListAsync();
+            roles = (await RoleService.GetRolesAsync()).ToList();
         }
         catch (Exception ex)
         {
@@ -128,13 +107,50 @@
         }
     }
 
-    private void NavigateToUser(string userId)
+    /// <summary>
+    /// Navigates to the role editing page.
+    /// </summary>
+    /// <param name="roleId">The ID of the role to edit.</param>
+    private void EditRole(string roleId)
     {
-        Navigation.NavigateTo($"/Admin/User/{userId}/");
+        Navigation.NavigateTo($"/Admin/Role/{roleId}/Edit");
     }
 
-    private void NavigateToAddUser()
+    /// <summary>
+    /// Navigates to the add role page.
+    /// </summary>
+    private void NavigateToAddRole()
     {
-        Navigation.NavigateTo("Admin/Users/New");
+        Navigation.NavigateTo("Admin/Roles/New");
+    }
+
+    /// <summary>
+    /// Navigates to the role detail page.
+    /// </summary>
+    /// <param name="roleId">The ID of the role to view.</param>
+    private void NavigateToRole(string roleId)
+    {
+        Navigation.NavigateTo($"/Admin/Roles/{roleId}/");
+    }
+
+    /// <summary>
+    /// Deletes a role by its ID.
+    /// </summary>
+    /// <param name="roleId">The ID of the role to delete.</param>
+    private async Task DeleteRole(string roleId)
+    {
+        var role = await RoleService.GetRoleByIdAsync(roleId);
+        if (role != null)
+        {
+            var result = await RoleService.DeleteRoleAsync(roleId);
+            if (result)
+            {
+                roles = (await RoleService.GetRolesAsync()).ToList();
+            }
+            else
+            {
+                // Handle the error as needed, e.g., show a message to the user
+            }
+        }
     }
 }

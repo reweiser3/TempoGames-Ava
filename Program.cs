@@ -41,6 +41,7 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FriendsService>();
 builder.Services.AddScoped<IGameStatsService, GameStatsService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 var app = builder.Build();
 
