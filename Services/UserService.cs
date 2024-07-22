@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ava.Data.Users;
 
 public class UserService
 {
@@ -42,43 +44,53 @@ public class UserService
     }
 
     /// <summary>
-    /// Updates the details of an existing user asynchronously.
+    /// Updates the details of an existing user asynchronously based on ApplicationUserInputModel.
     /// </summary>
-    /// <param name="user">The user object with updated details.</param>
+    /// <param name="userInput">The user input model with updated details.</param>
+    /// <param name="userId">The ID of the user to update.</param>
     /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
     /// <exception cref="Exception">Throws an exception if an error occurs while updating the user.</exception>
-    public async Task<bool> UpdateUserAsync(ApplicationUser user)
+    public async Task<bool> UpdateUserAsync(ApplicationUserInputModel userInput, string userId)
     {
         try
         {
-            var existingUser = await _userManager.FindByIdAsync(user.Id);
+            var existingUser = await _userManager.FindByIdAsync(userId);
             if (existingUser == null)
             {
-                _logger.LogError("User with ID {UserId} not found.", user.Id);
+                _logger.LogError("User with ID {UserId} not found.", userId);
                 return false;
             }
 
             // Update the existing user's properties
-            existingUser.PhoneNumber = user.PhoneNumber;
+            existingUser.Given = userInput.Given;
+            existingUser.Middle = userInput.Middle;
+            existingUser.Family = userInput.Family;
+            existingUser.Birthdate = userInput.Birthdate;
+            existingUser.Gamertag = userInput.Gamertag;
+            existingUser.Gender = userInput.Gender;
+            existingUser.City = userInput.City;
+            existingUser.State = userInput.State;
+            existingUser.Country = userInput.Country;
+            existingUser.ProfilePictureUrl = userInput.ProfilePictureUrl;
 
             var result = await _userManager.UpdateAsync(existingUser);
             if (result.Succeeded)
             {
-                _logger.LogInformation("User with ID {UserId} was successfully updated.", user.Id);
+                _logger.LogInformation("User with ID {UserId} was successfully updated.", userId);
                 return true;
             }
             else
             {
                 foreach (var error in result.Errors)
                 {
-                    _logger.LogError("Error updating user with ID {UserId}: {ErrorDescription}", user.Id, error.Description);
+                    _logger.LogError("Error updating user with ID {UserId}: {ErrorDescription}", userId, error.Description);
                 }
                 return false;
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while updating the user with ID {UserId}.", user.Id);
+            _logger.LogError(ex, "An error occurred while updating the user with ID {UserId}.", userId);
             throw;
         }
     }

@@ -1,20 +1,99 @@
 ﻿@page "/Admin/User/{userId}/"
 @inject UserService UserService
-@using Ava.Data
+@using Ava.Data.Users
 @using Microsoft.AspNetCore.Authorization
 @using Ava.Components.Account.Shared
 @using Ava.Components.Admin.Users.Components
 @inherits Ava.Components.Bases.LayoutBase
 @attribute [Authorize(Roles = "Admin")]
 
-<AuthorizeView Roles="Admin">
-    <Authorized>
+<AuthorizeView Roles="Admin" Context="authContext">
+    <Authorized Context="authorizedContext">
         <UserNavBar User="user" />
         <div class="flex justify-center mt-1">
             <div class="w-4/5">
-                <div class="flex p-2">
+                @if (userInputModel != null)
+                {
+                    @if (userUpdated)
+                    {
+                        <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 w-full" role="alert">
+                            <span class="font-medium">Success!</span> The user account has been updated.
+                        </div>
+                    }
 
-                </div>
+                    <div class="flex flex-col space-y-4">
+                        <EditForm Model="userInputModel" OnValidSubmit="HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="mb-3">
+                                <label for="given" class="form-label">Given Name</label>
+                                <InputText id="given" class="form-control" @bind-Value="userInputModel.Given" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="middle" class="form-label">Middle Name</label>
+                                <InputText id="middle" class="form-control" @bind-Value="userInputModel.Middle" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="family" class="form-label">Family Name</label>
+                                <InputText id="family" class="form-control" @bind-Value="userInputModel.Family" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="birthdate" class="form-label">Birthdate</label>
+                                <InputDate id="birthdate" class="form-control" @bind-Value="userInputModel.Birthdate" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="gamertag" class="form-label">Gamertag</label>
+                                <InputText id="gamertag" class="form-control" @bind-Value="userInputModel.Gamertag" required />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">Gender</label>
+                                <InputSelect id="gender" class="form-control" @bind-Value="userInputModel.Gender">
+                                    @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                                    {
+                                        <option value="@gender">@gender</option>
+                                    }
+                                </InputSelect>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <InputText id="city" class="form-control" @bind-Value="userInputModel.City" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <InputText id="state" class="form-control" @bind-Value="userInputModel.State" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <InputSelect id="country" class="form-control" @bind-Value="userInputModel.Country" required>
+                                    @foreach (var country in Enum.GetValues(typeof(Country)))
+                                    {
+                                        <option value="@country">@EnumHelper.GetEnumDescription((Country)country)</option>
+                                    }
+                                </InputSelect>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="profilePictureUrl" class="form-label">Profile Picture URL</label>
+                                <InputText id="profilePictureUrl" class="form-control" @bind-Value="userInputModel.ProfilePictureUrl" />
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </EditForm>
+                    </div>
+                }
+                else
+                {
+                    <p>Loading...</p>
+                }
             </div>
         </div>
     </Authorized>
@@ -28,14 +107,60 @@
     [Parameter]
     public string userId { get; set; } = default!;
 
-    private ApplicationUser user = default!;
+    private ApplicationUserInputModel userInputModel;
+    private ApplicationUser user;
+    private bool userUpdated = false;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        if(userId != default)
+        if (!string.IsNullOrEmpty(userId))
         {
             user = await UserService.FindUserByIdAsync(userId);
+            if (user != null)
+            {
+                userInputModel = new ApplicationUserInputModel
+                    {
+                        Given = user.Given,
+                        Middle = user.Middle,
+                        Family = user.Family,
+                        Birthdate = user.Birthdate,
+                        Gamertag = user.Gamertag,
+                        Gender = Enum.TryParse<Gender>(user.Gender, out var parsedGender) ? parsedGender.ToString() : Gender.Other.ToString(),
+                        City = user.City,
+                        State = user.State,
+                        Country = Enum.TryParse<Country>(user.Country.Replace(" ", ""), out var parsedCountry) ? parsedCountry.ToString() : Country.Other.ToString(),
+                        ProfilePictureUrl = user.ProfilePictureUrl
+                    };
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (user != null)
+        {
+            user.Given = userInputModel.Given;
+            user.Middle = userInputModel.Middle;
+            user.Family = userInputModel.Family;
+            user.Birthdate = userInputModel.Birthdate;
+            user.Gamertag = userInputModel.Gamertag;
+            user.Gender = userInputModel.Gender.ToString();
+            user.City = userInputModel.City;
+            user.State = userInputModel.State;
+            user.Country = userInputModel.Country.ToString().Replace(" ", "");
+            user.ProfilePictureUrl = userInputModel.ProfilePictureUrl;
+
+            var success = await UserService.UpdateUserAsync(userInputModel, userId);
+            if (success)
+            {
+                userUpdated = true;
+                await InvokeAsync(StateHasChanged);
+            }
+            else
+            {
+                // Handle failure (e.g., show an error message)
+            }
         }
     }
 }
